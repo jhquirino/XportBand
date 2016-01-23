@@ -1,0 +1,26 @@
+﻿<Application x:Class="XportBand.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:XportBand"
+             xmlns:vm="using:XportBand.ViewModel"
+             xmlns:convert="using:XportBand.Converters">
+    <!--RequestedTheme="Light">-->
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary>
+                    <vm:ViewModelLocator x:Key="Locator" />
+                    <convert:StringFormatConverter x:Key="StringFormatConverter" />
+                    <convert:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+                    <convert:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterReversed" IsReversed="True" />
+                    <convert:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+                    <convert:NullToVisibilityConverter x:Key="NullToVisibilityConverterReversed" IsReversed="True" />
+                    <convert:BooleanInverseConverter x:Key="BooleanInverseConverter" />
+                    <convert:ActivityTypeToPathConverter x:Key="ActivityTypeToPathConverter" />
+                </ResourceDictionary>
+                <ResourceDictionary Source="/Assets/Icons.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>

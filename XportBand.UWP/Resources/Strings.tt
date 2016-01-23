@@ -1,0 +1,139 @@
+﻿<#@ template language="C#" hostspecific="True" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ assembly name="System.Xml.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Linq.Expressions" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Xml.Linq" #>
+//-----------------------------------------------------------------------
+// <copyright file="Strings.cs" company="Jorge Alberto Hernández Quirino">
+// Copyright (c) Jorge Alberto Hernández Quirino 2015. All rights reserved.
+// </copyright>
+// <author>Jorge Alberto Hernández Quirino</author>
+//-----------------------------------------------------------------------
+namespace XportBand.Resources
+{
+	using Windows.ApplicationModel.Resources;
+	
+	/// <summary>
+	/// Class for Localized Resource Strings.
+	/// </summary>
+	public static class Strings
+	{
+		
+		/// <summary>
+		/// Instance to load resources subtree of the currently running app's main ResourceMap.
+		/// </summary>
+		private static ResourceLoader moResourceLoader = new ResourceLoader();		
+		<# 
+		string lsXamlResourceLang = Path.Combine(Path.GetDirectoryName(this.Host.TemplateFile), @"en-US\Resources.resw"); 
+		string lsResourceKey = string.Empty;
+		string lsResourceValue = string.Empty;
+		string lsResourceKeySafe = string.Empty;
+		string lsResourceKeyUpper = string.Empty;
+		StringBuilder loStrCode = new StringBuilder();
+		
+		XDocument loDocument = XDocument.Load(lsXamlResourceLang);
+		var loStrings = (from loString in loDocument.Descendants("data")
+						 select loString);
+		foreach(var loString in loStrings)
+		{
+			if (loString.Attribute("type") != null)
+				continue;
+			lsResourceKey = loString.Attribute("name").Value;
+			lsResourceValue = loString.Element("value").Value;
+			lsResourceKeySafe = ToSafeName(lsResourceKey);
+			lsResourceKeyUpper = CamelCaseToUpperCase(lsResourceKeySafe);#>
+		
+		/// <summary>
+		/// Key for resource string <b><#=lsResourceKey#></b>.
+		/// </summary>
+		const string <#=lsResourceKeyUpper#> = "<#=lsResourceValue#>";
+		/// <summary>
+		/// Inner member for property <see cref="<#=lsResourceKeySafe#>"/>.
+		/// </summary>
+		static string ms<#=lsResourceKeySafe#>;
+		/// <summary>
+		/// Gets string value for resource <b><#=lsResourceKey#></b> (<i>"<#=lsResourceValue#>"</i>).
+		/// </summary>
+		public static string <#=lsResourceKeySafe#>
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(ms<#=lsResourceKeySafe#>))
+				{
+					ms<#=lsResourceKeySafe#> = moResourceLoader.GetString("<#=lsResourceKey#>");
+					if (string.IsNullOrEmpty(ms<#=lsResourceKeySafe#>))
+					{
+						ms<#=lsResourceKeySafe#> = <#=lsResourceKeyUpper#>;
+					}
+				}
+				return ms<#=lsResourceKeySafe#>;
+			}
+		}
+		<#}#>
+		
+	}
+	
+}
+
+<#+
+	public string ToSafeName(string name)
+	{
+		string lsSafeName = string.Empty;
+		string lsPatternStart = @"[\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}_]";
+		string lsPatternPart = @"[\p{Lu}\p{Ll}\p{Lt}\p{Lm}\p{Lo}\p{Nl}\p{Nd}\p{Pc}\p{Mn}\p{Mc}\p{Cf}]";
+		for (int i = 0; i < name.Length; i++)
+		{
+			if (lsSafeName.Length == 0)
+			{
+				if (Regex.IsMatch(name[i].ToString(), lsPatternStart))
+				{
+					lsSafeName += name[i];
+				}
+			}
+			else
+			{
+				if (Regex.IsMatch(name[i].ToString(), lsPatternPart))
+				{
+					lsSafeName += name[i];
+				}
+			}
+		}
+		return lsSafeName;
+	}
+
+    public string CamelCaseToUpperCase(string camelCase)
+	{
+		string lsUpperCase = string.Empty;
+		string lsPattern = "[A-Z]";
+		int liIndexStart = 0;
+		int liIndexEnd = 0;
+		string lsTmp = string.Empty;
+		Regex loRegEx = new Regex(lsPattern);
+		MatchCollection loMatches = loRegEx.Matches(camelCase);
+		foreach (Match loMatch in loMatches)
+		{
+			liIndexEnd = loMatch.Index;
+			if (liIndexEnd != liIndexStart)
+			{
+				lsTmp = camelCase.Substring(liIndexStart, (liIndexEnd - liIndexStart));
+				lsUpperCase += String.IsNullOrEmpty(lsUpperCase) ? string.Empty : "_";
+				lsUpperCase += lsTmp.ToUpper();
+				liIndexStart = liIndexEnd;
+			}
+		}
+		if (camelCase.Length > liIndexStart)
+		{
+			lsTmp = camelCase.Substring(liIndexStart, (camelCase.Length - liIndexStart));
+			lsUpperCase += String.IsNullOrEmpty(lsUpperCase) ? string.Empty : "_";
+			lsUpperCase += lsTmp.ToUpper();
+		}
+		return lsUpperCase;
+	}
+#>

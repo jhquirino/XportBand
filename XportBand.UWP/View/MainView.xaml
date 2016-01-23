@@ -1,0 +1,253 @@
+﻿<Page x:Class="XportBand.View.MainView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:vw="using:XportBand.View"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:i="using:Microsoft.Xaml.Interactivity"
+      xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
+      mc:Ignorable="d"
+      DataContext="{Binding Main, Source={StaticResource Locator}}">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <!--#region Title/Progress -->
+        <!-- Title -->
+        <TextBlock x:Uid="TextAppTitle"
+                   Grid.Row="0" 
+                   Grid.Column="0" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Left" 
+                   Margin="10,10,0,10"
+                   Style="{ThemeResource TitleTextBlockStyle}" />
+        <!-- Progress Indicator -->
+        <ProgressRing Grid.Row="0" 
+                          Grid.Column="1" 
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Right"
+                          Margin="0,10,10,10"
+                          IsActive="{Binding IsRunningRequest}"
+                          Visibility="{Binding IsRunningRequest, Converter={StaticResource BooleanToVisibilityConverter}}" />
+        <!--#endregion-->
+
+        <!-- Sign-in disclaimer -->
+        <TextBlock x:Uid="TextSignInDisclaimer" 
+                       Grid.Row="1" 
+                       Grid.Column="0" 
+                       Grid.ColumnSpan="2" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Left"
+                       TextWrapping="WrapWholeWords"
+                       Margin="10"
+                       Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverterReversed}}"/>
+
+        <!-- Activity Type Filter -->
+        <StackPanel Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Margin="5">
+            <Button VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Margin="0,5,0,5"
+                        IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                        Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Width="16"
+                                  Height="16"
+                                  Stretch="Uniform"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  Data="{StaticResource FilterPath}"
+                                  Fill="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                        <TextBlock x:Uid="TextFilterActivityType" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" />
+                    </StackPanel>
+                </Button.Content>
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeExercise" IsChecked="{Binding FilterActivityExercise, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeRun" IsChecked="{Binding FilterActivityRun, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeBike" IsChecked="{Binding FilterActivityBike, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGolf" IsChecked="{Binding FilterActivityGolf, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeSleep" IsChecked="{Binding FilterActivitySleep, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGuided" IsChecked="{Binding FilterActivityGuided, Mode=TwoWay}" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+            <Button VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Margin="5,5,0,5"
+                        IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                        Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Width="16"
+                                  Height="16"
+                                  Stretch="Uniform"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  Data="{StaticResource CalendarSettingsPath}"
+                                  Fill="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                        <TextBlock x:Uid="TextFilterActivityPeriod" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" />
+                    </StackPanel>
+                </Button.Content>
+                <Button.Flyout>
+                    <MenuFlyout>
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodDay" IsChecked="{Binding FilterPeriodDay, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodWeek" IsChecked="{Binding FilterPeriodWeek, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodMonth" IsChecked="{Binding FilterPeriodMonth, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodYear" IsChecked="{Binding FilterPeriodYear, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodAll" IsChecked="{Binding FilterPeriodAll, Mode=TwoWay}" />
+                    </MenuFlyout>
+                </Button.Flyout>
+            </Button>
+        </StackPanel>
+
+        <!-- Activities List -->
+        <ScrollViewer Grid.Row="3"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto"
+                      Margin="0,5,0,0"
+                      BorderThickness="0,1,0,1"
+                      BorderBrush="{StaticResource SystemControlHighlightChromeHighBrush}" >
+            <ListView ItemsSource="{Binding Activities}"
+                          SelectedItem="{Binding SelectedActivity, Mode=TwoWay}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid BorderThickness="0,0,0,1" BorderBrush="{StaticResource SystemControlHighlightChromeHighBrush}" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <!--<ColumnDefinition Width="Auto" />-->
+                            </Grid.ColumnDefinitions>
+
+                            <Path Grid.Row="0" 
+                                      Grid.Column="0" 
+                                      Grid.RowSpan="2" 
+                                      Width="32" 
+                                      Height="32" 
+                                      Stretch="Uniform" 
+                                      RenderTransformOrigin="0.5,0.5" 
+                                      Margin="5" 
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Center"
+                                      Data="{Binding Type, Converter={StaticResource ActivityTypeToPathConverter}}" 
+                                      Fill="{ThemeResource SystemControlForegroundAccentBrush}" />
+
+                            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="5" >
+                                <Path Width="16" 
+                                          Height="16" 
+                                          Stretch="Uniform" 
+                                          RenderTransformOrigin="0.5,0.5" 
+                                          Data="{StaticResource CalendarPath}" 
+                                          Fill="{ThemeResource SystemControlHighlightChromeHighBrush}" />
+                                <TextBlock VerticalAlignment="Center" 
+                                               HorizontalAlignment="Left" 
+                                               Margin="5,0,0,0" 
+                                               Text="{Binding StartTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:yyyy-MM-dd HH:mm}'}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Margin="5" >
+                                <Path Width="16" 
+                                          Height="16" 
+                                          Stretch="Uniform" 
+                                          RenderTransformOrigin="0.5,0.5" 
+                                          Data="{StaticResource StopClockPath}" 
+                                          Fill="{ThemeResource SystemControlHighlightChromeHighBrush}" />
+                                <TextBlock VerticalAlignment="Center" 
+                                               HorizontalAlignment="Left" 
+                                               Margin="5,0,0,0" 
+                                               Text="{Binding Duration}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="5" >
+                                <Path Width="16" 
+                                          Height="16" 
+                                          Stretch="Uniform" 
+                                          RenderTransformOrigin="0.5,0.5" 
+                                          Data="{StaticResource HearthECGPath}" 
+                                          Fill="{ThemeResource SystemControlHighlightChromeHighBrush}" />
+                                <TextBlock x:Uid="TextAvgSymbol"
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Left"
+                                           Margin="5,0,0,0" />
+                                <TextBlock VerticalAlignment="Center" 
+                                           HorizontalAlignment="Left" 
+                                           Margin="0,0,0,0" 
+                                           Text="{Binding HeartRateSummary.AverageHeartRate}" />
+                                <TextBlock x:Uid="TextMaxSymbol"
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Left"
+                                           Margin="10,0,0,0" />
+                                <TextBlock VerticalAlignment="Center" 
+                                           HorizontalAlignment="Left" 
+                                           Margin="0,0,0,0" 
+                                           Text="{Binding HeartRateSummary.PeakHeartRate}" />
+                                <TextBlock x:Uid="TextMinSymbol"
+                                           VerticalAlignment="Center" 
+                                           HorizontalAlignment="Left"
+                                           Margin="10,0,0,0" />
+                                <TextBlock VerticalAlignment="Center" 
+                                           HorizontalAlignment="Left" 
+                                           Margin="0,0,0,0" 
+                                           Text="{Binding HeartRateSummary.LowestHeartRate}" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="5" >
+                                <Path Width="16" 
+                                          Height="16" 
+                                          Stretch="Uniform" 
+                                          RenderTransformOrigin="0.5,0.5" 
+                                          Data="{StaticResource FlamePath}" 
+                                          Fill="{ThemeResource SystemControlHighlightChromeHighBrush}" />
+                                <TextBlock VerticalAlignment="Center" 
+                                               HorizontalAlignment="Left" 
+                                               Margin="5,0,0,0" 
+                                               Text="{Binding CaloriesBurnedSummary.TotalCalories}" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </ScrollViewer>
+    </Grid>
+
+
+    <Page.BottomAppBar>
+        <CommandBar IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}">
+            <AppBarButton x:Uid="AppBarButtonSettings" 
+                          Icon="Setting"
+                          Command="{Binding GoToSettingsCommand}" />
+            <AppBarButton x:Uid="AppBarButtonListActivities" 
+                          Icon="Refresh"
+                          Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Command="{Binding ListActivitiesCommand}" />
+            <AppBarButton x:Uid="AppBarButtonActivityDetails" 
+                          Icon="PreviewLink"
+                          Visibility="{Binding SelectedActivity, Converter={StaticResource NullToVisibilityConverter}}"
+                          Command="{Binding ShowActivityDetailsCommand}" />
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>
