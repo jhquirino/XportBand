@@ -9,117 +9,219 @@
       xmlns:ic="using:Microsoft.Xaml.Interactions.Core"
       DataContext="{Binding Settings, Source={StaticResource Locator}}">
 
+    <!--#region Resources -->
+    <Page.Resources>
+        <ResourceDictionary Source="/Assets/PivotHeaderStyle.xaml" />
+    </Page.Resources>
+    <!--#endregion-->
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid Margin="10">
+        <Grid>
+            <!--#region Column/Row Definitions-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Margin="0,0,0,10" Orientation="Horizontal">
+            <!--#endregion-->
+            <!--#region Title-->
+            <StackPanel Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="10,10,5,10" 
+                        Orientation="Horizontal">
+                <!--App-->
                 <TextBlock x:Uid="TextAppTitle"
                            VerticalAlignment="Center" 
                            HorizontalAlignment="Left" 
                            Style="{ThemeResource TitleTextBlockStyle}"/>
+                <!--Separator-->
                 <TextBlock Text="/"
                            VerticalAlignment="Center" 
                            HorizontalAlignment="Left"
                            Margin="5,0,5,0"
                            Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <!--Page Name-->
                 <TextBlock x:Uid="TextSettingsTitle"
                            VerticalAlignment="Center" 
                            HorizontalAlignment="Left" 
                            Style="{ThemeResource SubtitleTextBlockStyle}"/>
             </StackPanel>
-            <!-- Microsoft Health -->
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <!-- MicrosoftHealth Logo -->
-                <Image Grid.Row="0"
-                       Grid.Column="0"
-                       Grid.RowSpan="2"
-                       Width="56"
-                       Height="56"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       Stretch="Uniform"
-                       Margin="5" 
-                       Source="ms-appx:///Assets/MicrosoftHealthLogo.png" />
-                <!-- MocrosoftHealth Title -->
-                <Border Grid.Row="0"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2"
-                        BorderBrush="{StaticResource SystemControlForegroundBaseHighBrush}"
-                        BorderThickness="0,0,0,1">
-                    <TextBlock x:Uid="TextMicrosoftHealth"
-                               VerticalAlignment="Bottom"
-                               HorizontalAlignment="Left"
-                               Margin="10,5,10,5"
-                               Style="{ThemeResource BaseTextBlockStyle}" />
-                </Border>
-                <!-- MocrosoftHealth User FirstName -->
-                <TextBlock Grid.Row="1"
-                           Grid.Column="1"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right"
-                           Margin="10,5,10,5"
-                           Text="{Binding MSHealthProfile.FirstName}"/>
-                <!-- Sign-in/Sign-out Button -->
-                <StackPanel Grid.Row="1"
-                            Grid.Column="2"
-                            Orientation="Horizontal">
-                    <ProgressRing VerticalAlignment="Center"
-                                  IsActive="{Binding IsMSHealthRunning}"
-                                  Visibility="{Binding IsMSHealthRunning, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <Button x:Uid="ButtonSignIn"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Right"
-                            Margin="10,5,10,5"
-                            IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
-                            Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverterReversed}}"
-                            Command="{Binding SignInMSHealthCommand}" />
-                    <Button x:Uid="ButtonSignOut"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Right"
-                            Height="35"
-                            Width="100"
-                            Margin="10,5,10,5"
-                            IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
-                            Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Command="{Binding SignOutMSHealthCommand}" />
-                </StackPanel>
-                <!-- Distance Unit -->
-                <StackPanel Grid.Row="2"
-                            Grid.Column="1"
-                            Grid.ColumnSpan="3"
-                            Orientation="Horizontal"
-                            BorderThickness="0,1,0,0"
-                            BorderBrush="{ThemeResource SystemControlForegroundBaseMediumBrush}"
-                            Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <TextBlock x:Uid="TextDistanceUnit"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="10,5,5,5" />
-                    <ComboBox VerticalAlignment="Center"
-                              HorizontalAlignment="Left"
-                              Margin="5,5,5,10"
-                              IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
-                              ItemsSource="{Binding DistanceUnits}"
-                              SelectedItem="{Binding SelectedDistanceUnit, Mode=TwoWay}"
-                              DisplayMemberPath="Description"/>
-                </StackPanel>
-            </Grid>
+            <!--#endregion-->
+            <!--#region Content-->
+            <Pivot Grid.Row="1" 
+                   Grid.Column="0">
+                <!--#region Services-->
+                <PivotItem>
+                    <!--#region Header-->
+                    <PivotItem.Header>
+                        <vw:TabHeader x:Uid="TextSettingsServicesHeader" Glyph="&#xE753;" />
+                    </PivotItem.Header>
+                    <!--#endregion-->
+                    <!--#region Content-->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  BorderThickness="0,1,0,0"
+                                  BorderBrush="{StaticResource SystemControlHighlightListAccentLowBrush}">
+                        <Grid Margin="0,5,0,5">
+                            <!--#region Row/Column Definitions-->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!--#endregion-->
+                            <!--#region MicrosoftHealth-->
+                            <!-- MicrosoftHealth Logo -->
+                            <Image Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.RowSpan="2"
+                                   Width="56"
+                                   Height="56"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Stretch="Uniform"
+                                   Margin="5"
+                                   Source="ms-appx:///Assets/MicrosoftHealthLogo.png" />
+                            <!-- MicrosoftHealth Title -->
+                            <Border Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.ColumnSpan="2"
+                                    BorderBrush="{StaticResource SystemControlForegroundBaseHighBrush}"
+                                    BorderThickness="0,0,0,1">
+                                <TextBlock x:Uid="TextMicrosoftHealth"
+                                           VerticalAlignment="Bottom"
+                                           HorizontalAlignment="Left"
+                                           Margin="10,5,10,5"
+                                           Style="{ThemeResource BaseTextBlockStyle}" />
+                            </Border>
+                            <!-- Sign-in/Sign-out Button -->
+                            <StackPanel Grid.Row="1"
+                                        Grid.Column="1"
+                                        Orientation="Horizontal">
+                                <Button x:Uid="ButtonSignIn"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Margin="10,5,10,5"
+                                        IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                        Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverterReversed}}"
+                                        Command="{Binding SignInMSHealthCommand}" />
+                                <Button x:Uid="ButtonSignOut"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left"
+                                        Margin="10,5,10,5"
+                                        IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                        Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                        Command="{Binding SignOutMSHealthCommand}" />
+                                <ProgressRing VerticalAlignment="Center"
+                                              IsActive="{Binding IsMSHealthRunning}"
+                                              Visibility="{Binding IsMSHealthRunning, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            </StackPanel>
+                            <!-- MicrosoftHealth UserName -->
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="2"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       Margin="10,5,10,5"
+                                       Text="{Binding MSHealthProfile.FirstName}"/>
+                            <!-- Distance Unit -->
+                            <TextBlock x:Uid="TextDistanceUnit"
+                                       Grid.Row="2"
+                                       Grid.Column="1"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       Margin="10,10,5,5" />
+                            <ComboBox Grid.Row="2"
+                                      Grid.Column="2"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      Margin="5,10,5,5"
+                                      IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                      ItemsSource="{Binding DistanceUnits}"
+                                      SelectedItem="{Binding SelectedDistanceUnit, Mode=TwoWay}"
+                                      DisplayMemberPath="Description"/>
+                            <!--#endregion-->
+                        </Grid>
+                    </ScrollViewer>
+                    <!--#endregion-->
+                </PivotItem>
+                <!--#endregion-->
+                <!--#region About-->
+                <PivotItem>
+                    <!--#region Header-->
+                    <PivotItem.Header>
+                        <vw:TabHeader x:Uid="TextSettingsAboutHeader" Glyph="&#xE897;" />
+                    </PivotItem.Header>
+                    <!--#endregion-->
+                    <!--#region Content-->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  BorderThickness="0,1,0,0"
+                                  BorderBrush="{StaticResource SystemControlHighlightListAccentLowBrush}">
+                        <Grid Margin="0,5,0,5">
+                            <!--#region Row/Column Definitions-->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!--#endregion-->
+                            <!--#region XportBand-->
+                            <!--XportBand Logo-->
+                            <BitmapIcon Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.RowSpan="4"
+                                        Width="56"
+                                        Height="56"
+                                        VerticalAlignment="Top"
+                                        HorizontalAlignment="Center"
+                                        Margin="5"
+                                        Foreground="{ThemeResource SystemControlForegroundAccentBrush}"
+                                        UriSource="ms-appx:///Assets/XportBandLogo.png" />
+                            <!--XportBand Name/Version-->
+                            <StackPanel Grid.Row="0"
+                                        Grid.Column="1"
+                                        Orientation="Horizontal"
+                                        BorderBrush="{StaticResource SystemControlForegroundBaseHighBrush}"
+                                        BorderThickness="0,0,0,1">
+                                <TextBlock x:Uid="TextAppTitle"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Bottom"
+                                           Margin="10,5,5,2"
+                                           Style="{ThemeResource BaseTextBlockStyle}"/>
+                                <TextBlock HorizontalAlignment="Left" 
+                                           VerticalAlignment="Bottom" 
+                                           Margin="5,5,5,2"
+                                           Style="{ThemeResource CaptionTextBlockStyle}" 
+                                           Text="{Binding AppVersion}"/>
+                            </StackPanel>
+                            <!--XportBand Description-->
+                            <TextBlock x:Uid="TextSettingsAppDescription"
+                                       Grid.Row="1"
+                                       Grid.Column="1"
+                                       Margin="10"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"
+                                       TextWrapping="WrapWholeWords" />
+                            <!--#endregion-->
+                        </Grid>
+                    </ScrollViewer>
+                    <!--#endregion-->
+                </PivotItem>
+                <!--#endregion-->
+            </Pivot>
+            <!--#endregion-->
         </Grid>
         <WebView x:Name="wvwSignIn" 
                  Margin="10" 

@@ -342,4 +342,74 @@
   <data name="MessageTitleError" xml:space="preserve">
     <value>error</value>
   </data>
+  <data name="AppBarButtonActivitiesExportCSV.Label" xml:space="preserve">
+    <value>export activities to csv</value>
+  </data>
+  <data name="FileCSVActivitiesHeader" xml:space="preserve">
+    <value>StartTime,Type,Duration,AvgHR,MaxHR,MinHR,Calories,Distance,Pace,EleGain,EleLoss,EleMax,EleMin,HRUnderHealthy,HRHealthy,HRFitness,HRAerobic,HRAnaerobic,HRRedline,HROverReline</value>
+  </data>
+  <data name="MessageButtonCancel" xml:space="preserve">
+    <value>cancel</value>
+  </data>
+  <data name="MessageButtonNo" xml:space="preserve">
+    <value>no</value>
+  </data>
+  <data name="MessageButtonYes" xml:space="preserve">
+    <value>yes</value>
+  </data>
+  <data name="MessageContentExportCSVFail" xml:space="preserve">
+    <value>activities couldn't be exported to: {0}</value>
+  </data>
+  <data name="MessageContentExportCSVSuccess" xml:space="preserve">
+    <value>activities exported to: {0}</value>
+  </data>
+  <data name="MessageContentExportEmptyGPSData" xml:space="preserve">
+    <value>seems that current activity doesn't contains valid gps data. ¿export anyway?</value>
+  </data>
+  <data name="MessageContentExportGPXFail" xml:space="preserve">
+    <value>activity couldn't be exported to: {0}</value>
+  </data>
+  <data name="MessageContentExportGPXSuccess" xml:space="preserve">
+    <value>activity exported to: {0}</value>
+  </data>
+  <data name="MessageContentSelectActivityType" xml:space="preserve">
+    <value>select at least one activity type to filter.</value>
+  </data>
+  <data name="MessageTitleExportCSV" xml:space="preserve">
+    <value>export csv</value>
+  </data>
+  <data name="MessageTitleExportGPX" xml:space="preserve">
+    <value>export gpx</value>
+  </data>
+  <data name="MessageTitleFilterActivities" xml:space="preserve">
+    <value>filter activities</value>
+  </data>
+  <data name="TextDistanceUnitShortKilometer.Text" xml:space="preserve">
+    <value>km</value>
+  </data>
+  <data name="TextDistanceUnitShortMile.Text" xml:space="preserve">
+    <value>mi</value>
+  </data>
+  <data name="TextNoSplitsDisclaimer.Text" xml:space="preserve">
+    <value>Split data not found for current activity</value>
+  </data>
+  <data name="TextSettingsAboutHeader.Label" xml:space="preserve">
+    <value>about</value>
+  </data>
+  <data name="TextSettingsAppDescription.Text" xml:space="preserve">
+    <value>eXport your Microsoft Band activities:
+- Filter by Type/Period
+- See Details/Heart Rate/Splits/Map
+- Export List to CSV
+- Export GPS activities to GPX (future support planned for TCX)</value>
+  </data>
+  <data name="TextSettingsServicesHeader.Label" xml:space="preserve">
+    <value>services</value>
+  </data>
+  <data name="TextSplitAvgHRHeader.Text" xml:space="preserve">
+    <value>avg hr</value>
+  </data>
+  <data name="TextSplitDurationHeader.Text" xml:space="preserve">
+    <value>duration</value>
+  </data>
 </root>

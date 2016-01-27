@@ -10,6 +10,7 @@
       DataContext="{Binding Main, Source={StaticResource Locator}}">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <!--#region Column/Row Definitions-->
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
@@ -20,6 +21,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <!--#endregion-->
         <!--#region Title/Progress -->
         <!-- Title -->
         <TextBlock x:Uid="TextAppTitle"
@@ -38,8 +40,7 @@
                           IsActive="{Binding IsRunningRequest}"
                           Visibility="{Binding IsRunningRequest, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <!--#endregion-->
-
-        <!-- Sign-in disclaimer -->
+        <!--#region Sign-in disclaimer-->
         <TextBlock x:Uid="TextSignInDisclaimer" 
                        Grid.Row="1" 
                        Grid.Column="0" 
@@ -49,71 +50,90 @@
                        TextWrapping="WrapWholeWords"
                        Margin="10"
                        Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverterReversed}}"/>
-
-        <!-- Activity Type Filter -->
+        <!--#endregion-->
+        <!--#region Filters-->
         <StackPanel Grid.Row="2"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center"
-                        Orientation="Horizontal"
-                        Margin="5">
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal"
+                    Margin="5">
+            <!-- Activity Type-->
             <Button VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Margin="0,5,0,5"
-                        IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
-                        Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    HorizontalAlignment="Left"
+                    Margin="0,5,0,5"
+                    IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                    Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <Path Width="16"
-                                  Height="16"
-                                  Stretch="Uniform"
-                                  RenderTransformOrigin="0.5,0.5"
-                                  Data="{StaticResource FilterPath}"
-                                  Fill="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
-                        <TextBlock x:Uid="TextFilterActivityType" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" />
+                              Height="16"
+                              Stretch="Uniform"
+                              RenderTransformOrigin="0.5,0.5"
+                              Data="{StaticResource FilterPath}"
+                              Fill="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                        <TextBlock x:Uid="TextFilterActivityType" 
+                                   VerticalAlignment="Center" 
+                                   HorizontalAlignment="Left" 
+                                   Margin="5,0,0,0" />
                     </StackPanel>
                 </Button.Content>
                 <Button.Flyout>
                     <MenuFlyout>
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeExercise" IsChecked="{Binding FilterActivityExercise, Mode=TwoWay}" />
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeRun" IsChecked="{Binding FilterActivityRun, Mode=TwoWay}" />
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeBike" IsChecked="{Binding FilterActivityBike, Mode=TwoWay}" />
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGolf" IsChecked="{Binding FilterActivityGolf, Mode=TwoWay}" />
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeSleep" IsChecked="{Binding FilterActivitySleep, Mode=TwoWay}" />
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGuided" IsChecked="{Binding FilterActivityGuided, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeExercise" 
+                                              IsChecked="{Binding FilterActivityExercise, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeRun" 
+                                              IsChecked="{Binding FilterActivityRun, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeBike" 
+                                              IsChecked="{Binding FilterActivityBike, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGolf" 
+                                              IsChecked="{Binding FilterActivityGolf, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeSleep" 
+                                              IsChecked="{Binding FilterActivitySleep, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGuided" 
+                                              IsChecked="{Binding FilterActivityGuided, Mode=TwoWay}" />
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
+            <!-- Period -->
             <Button VerticalAlignment="Center"
-                        HorizontalAlignment="Left"
-                        Margin="5,5,0,5"
-                        IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
-                        Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    HorizontalAlignment="Left"
+                    Margin="5,5,0,5"
+                    IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                    Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
                         <Path Width="16"
-                                  Height="16"
-                                  Stretch="Uniform"
-                                  RenderTransformOrigin="0.5,0.5"
-                                  Data="{StaticResource CalendarSettingsPath}"
-                                  Fill="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
-                        <TextBlock x:Uid="TextFilterActivityPeriod" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0" />
+                              Height="16"
+                              Stretch="Uniform"
+                              RenderTransformOrigin="0.5,0.5"
+                              Data="{StaticResource CalendarSettingsPath}"
+                              Fill="{ThemeResource SystemControlForegroundBaseMediumBrush}" />
+                        <TextBlock x:Uid="TextFilterActivityPeriod" 
+                                   VerticalAlignment="Center" 
+                                   HorizontalAlignment="Left" 
+                                   Margin="5,0,0,0" />
                     </StackPanel>
                 </Button.Content>
                 <Button.Flyout>
                     <MenuFlyout>
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodDay" IsChecked="{Binding FilterPeriodDay, Mode=TwoWay}" />
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodWeek" IsChecked="{Binding FilterPeriodWeek, Mode=TwoWay}" />
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodMonth" IsChecked="{Binding FilterPeriodMonth, Mode=TwoWay}" />
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodYear" IsChecked="{Binding FilterPeriodYear, Mode=TwoWay}" />
-                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodAll" IsChecked="{Binding FilterPeriodAll, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodDay" 
+                                              IsChecked="{Binding FilterPeriodDay, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodWeek"
+                                              IsChecked="{Binding FilterPeriodWeek, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodMonth"
+                                              IsChecked="{Binding FilterPeriodMonth, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodYear"
+                                              IsChecked="{Binding FilterPeriodYear, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodAll"
+                                              IsChecked="{Binding FilterPeriodAll, Mode=TwoWay}" />
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>
         </StackPanel>
-
-        <!-- Activities List -->
+        <!--#endregion-->
+        <!--#region Activities List-->
         <ScrollViewer Grid.Row="3"
                       Grid.Column="0"
                       Grid.ColumnSpan="2"
@@ -140,9 +160,8 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
-                                <!--<ColumnDefinition Width="Auto" />-->
                             </Grid.ColumnDefinitions>
-
+                            <!-- Activity Type (Icon) -->
                             <Path Grid.Row="0" 
                                       Grid.Column="0" 
                                       Grid.RowSpan="2" 
@@ -155,7 +174,7 @@
                                       HorizontalAlignment="Center"
                                       Data="{Binding Type, Converter={StaticResource ActivityTypeToPathConverter}}" 
                                       Fill="{ThemeResource SystemControlForegroundAccentBrush}" />
-
+                            <!-- Start Time -->
                             <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="5" >
                                 <Path Width="16" 
                                           Height="16" 
@@ -168,7 +187,7 @@
                                                Margin="5,0,0,0" 
                                                Text="{Binding StartTime, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:yyyy-MM-dd HH:mm}'}" />
                             </StackPanel>
-
+                            <!-- Duration -->
                             <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Margin="5" >
                                 <Path Width="16" 
                                           Height="16" 
@@ -181,7 +200,7 @@
                                                Margin="5,0,0,0" 
                                                Text="{Binding Duration}" />
                             </StackPanel>
-
+                            <!-- HeartRate -->
                             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="5" >
                                 <Path Width="16" 
                                           Height="16" 
@@ -189,32 +208,20 @@
                                           RenderTransformOrigin="0.5,0.5" 
                                           Data="{StaticResource HearthECGPath}" 
                                           Fill="{ThemeResource SystemControlHighlightChromeHighBrush}" />
-                                <TextBlock x:Uid="TextAvgSymbol"
-                                           VerticalAlignment="Center" 
-                                           HorizontalAlignment="Left"
-                                           Margin="5,0,0,0" />
                                 <TextBlock VerticalAlignment="Center" 
                                            HorizontalAlignment="Left" 
-                                           Margin="0,0,0,0" 
-                                           Text="{Binding HeartRateSummary.AverageHeartRate}" />
-                                <TextBlock x:Uid="TextMaxSymbol"
-                                           VerticalAlignment="Center" 
-                                           HorizontalAlignment="Left"
-                                           Margin="10,0,0,0" />
+                                           Margin="5,0,0,0" 
+                                           Text="{Binding HeartRateSummary.AverageHeartRate, Converter={StaticResource StringFormatConverter}, ConverterParameter='⁓{0:N0}'}" />
                                 <TextBlock VerticalAlignment="Center" 
                                            HorizontalAlignment="Left" 
-                                           Margin="0,0,0,0" 
-                                           Text="{Binding HeartRateSummary.PeakHeartRate}" />
-                                <TextBlock x:Uid="TextMinSymbol"
-                                           VerticalAlignment="Center" 
-                                           HorizontalAlignment="Left"
-                                           Margin="10,0,0,0" />
+                                           Margin="10,0,0,0" 
+                                           Text="{Binding HeartRateSummary.PeakHeartRate, Converter={StaticResource StringFormatConverter}, ConverterParameter='↑{0:N0}'}" />
                                 <TextBlock VerticalAlignment="Center" 
                                            HorizontalAlignment="Left" 
-                                           Margin="0,0,0,0" 
-                                           Text="{Binding HeartRateSummary.LowestHeartRate}" />
+                                           Margin="10,0,0,0" 
+                                           Text="{Binding HeartRateSummary.LowestHeartRate, Converter={StaticResource StringFormatConverter}, ConverterParameter='↓{0:N0}'}" />
                             </StackPanel>
-
+                            <!-- Calories -->
                             <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="5" >
                                 <Path Width="16" 
                                           Height="16" 
@@ -232,8 +239,8 @@
                 </ListView.ItemTemplate>
             </ListView>
         </ScrollViewer>
+        <!--#endregion-->
     </Grid>
-
 
     <Page.BottomAppBar>
         <CommandBar IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}">
@@ -248,6 +255,11 @@
                           Icon="PreviewLink"
                           Visibility="{Binding SelectedActivity, Converter={StaticResource NullToVisibilityConverter}}"
                           Command="{Binding ShowActivityDetailsCommand}" />
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Uid="AppBarButtonActivitiesExportCSV"
+                              Visibility="{Binding Activities, Converter={StaticResource NullToVisibilityConverter}}"
+                              Command="{Binding ExportActivitiesToCSVCommand}"/>
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
 </Page>

@@ -1,6 +1,6 @@
 ﻿//-----------------------------------------------------------------------
 // <copyright file="Strings.cs" company="Jorge Alberto Hernández Quirino">
-// Copyright (c) Jorge Alberto Hernández Quirino 2015. All rights reserved.
+// Copyright (c) Jorge Alberto Hernández Quirino 2015-2016. All rights reserved.
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
@@ -2041,6 +2041,600 @@ namespace XportBand.Resources
 					}
 				}
 				return msMessageTitleError;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>AppBarButtonActivitiesExportCSV.Label</b>.
+		/// </summary>
+		const string APP_BAR_BUTTON_ACTIVITIES_EXPORT_C_S_V_LABEL = "export activities to csv";
+		/// <summary>
+		/// Inner member for property <see cref="AppBarButtonActivitiesExportCSVLabel"/>.
+		/// </summary>
+		static string msAppBarButtonActivitiesExportCSVLabel;
+		/// <summary>
+		/// Gets string value for resource <b>AppBarButtonActivitiesExportCSV.Label</b> (<i>"export activities to csv"</i>).
+		/// </summary>
+		public static string AppBarButtonActivitiesExportCSVLabel
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msAppBarButtonActivitiesExportCSVLabel))
+				{
+					msAppBarButtonActivitiesExportCSVLabel = moResourceLoader.GetString("AppBarButtonActivitiesExportCSV.Label");
+					if (string.IsNullOrEmpty(msAppBarButtonActivitiesExportCSVLabel))
+					{
+						msAppBarButtonActivitiesExportCSVLabel = APP_BAR_BUTTON_ACTIVITIES_EXPORT_C_S_V_LABEL;
+					}
+				}
+				return msAppBarButtonActivitiesExportCSVLabel;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>FileCSVActivitiesHeader</b>.
+		/// </summary>
+		const string FILE_C_S_V_ACTIVITIES_HEADER = "StartTime,Type,Duration,AvgHR,MaxHR,MinHR,Calories,Distance,Pace,EleGain,EleLoss,EleMax,EleMin,HRUnderHealthy,HRHealthy,HRFitness,HRAerobic,HRAnaerobic,HRRedline,HROverReline";
+		/// <summary>
+		/// Inner member for property <see cref="FileCSVActivitiesHeader"/>.
+		/// </summary>
+		static string msFileCSVActivitiesHeader;
+		/// <summary>
+		/// Gets string value for resource <b>FileCSVActivitiesHeader</b> (<i>"StartTime,Type,Duration,AvgHR,MaxHR,MinHR,Calories,Distance,Pace,EleGain,EleLoss,EleMax,EleMin,HRUnderHealthy,HRHealthy,HRFitness,HRAerobic,HRAnaerobic,HRRedline,HROverReline"</i>).
+		/// </summary>
+		public static string FileCSVActivitiesHeader
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msFileCSVActivitiesHeader))
+				{
+					msFileCSVActivitiesHeader = moResourceLoader.GetString("FileCSVActivitiesHeader");
+					if (string.IsNullOrEmpty(msFileCSVActivitiesHeader))
+					{
+						msFileCSVActivitiesHeader = FILE_C_S_V_ACTIVITIES_HEADER;
+					}
+				}
+				return msFileCSVActivitiesHeader;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageButtonCancel</b>.
+		/// </summary>
+		const string MESSAGE_BUTTON_CANCEL = "cancel";
+		/// <summary>
+		/// Inner member for property <see cref="MessageButtonCancel"/>.
+		/// </summary>
+		static string msMessageButtonCancel;
+		/// <summary>
+		/// Gets string value for resource <b>MessageButtonCancel</b> (<i>"cancel"</i>).
+		/// </summary>
+		public static string MessageButtonCancel
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageButtonCancel))
+				{
+					msMessageButtonCancel = moResourceLoader.GetString("MessageButtonCancel");
+					if (string.IsNullOrEmpty(msMessageButtonCancel))
+					{
+						msMessageButtonCancel = MESSAGE_BUTTON_CANCEL;
+					}
+				}
+				return msMessageButtonCancel;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageButtonNo</b>.
+		/// </summary>
+		const string MESSAGE_BUTTON_NO = "no";
+		/// <summary>
+		/// Inner member for property <see cref="MessageButtonNo"/>.
+		/// </summary>
+		static string msMessageButtonNo;
+		/// <summary>
+		/// Gets string value for resource <b>MessageButtonNo</b> (<i>"no"</i>).
+		/// </summary>
+		public static string MessageButtonNo
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageButtonNo))
+				{
+					msMessageButtonNo = moResourceLoader.GetString("MessageButtonNo");
+					if (string.IsNullOrEmpty(msMessageButtonNo))
+					{
+						msMessageButtonNo = MESSAGE_BUTTON_NO;
+					}
+				}
+				return msMessageButtonNo;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageButtonYes</b>.
+		/// </summary>
+		const string MESSAGE_BUTTON_YES = "yes";
+		/// <summary>
+		/// Inner member for property <see cref="MessageButtonYes"/>.
+		/// </summary>
+		static string msMessageButtonYes;
+		/// <summary>
+		/// Gets string value for resource <b>MessageButtonYes</b> (<i>"yes"</i>).
+		/// </summary>
+		public static string MessageButtonYes
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageButtonYes))
+				{
+					msMessageButtonYes = moResourceLoader.GetString("MessageButtonYes");
+					if (string.IsNullOrEmpty(msMessageButtonYes))
+					{
+						msMessageButtonYes = MESSAGE_BUTTON_YES;
+					}
+				}
+				return msMessageButtonYes;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentExportCSVFail</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_EXPORT_C_S_V_FAIL = "activities couldn't be exported to: {0}";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentExportCSVFail"/>.
+		/// </summary>
+		static string msMessageContentExportCSVFail;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentExportCSVFail</b> (<i>"activities couldn't be exported to: {0}"</i>).
+		/// </summary>
+		public static string MessageContentExportCSVFail
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentExportCSVFail))
+				{
+					msMessageContentExportCSVFail = moResourceLoader.GetString("MessageContentExportCSVFail");
+					if (string.IsNullOrEmpty(msMessageContentExportCSVFail))
+					{
+						msMessageContentExportCSVFail = MESSAGE_CONTENT_EXPORT_C_S_V_FAIL;
+					}
+				}
+				return msMessageContentExportCSVFail;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentExportCSVSuccess</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_EXPORT_C_S_V_SUCCESS = "activities exported to: {0}";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentExportCSVSuccess"/>.
+		/// </summary>
+		static string msMessageContentExportCSVSuccess;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentExportCSVSuccess</b> (<i>"activities exported to: {0}"</i>).
+		/// </summary>
+		public static string MessageContentExportCSVSuccess
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentExportCSVSuccess))
+				{
+					msMessageContentExportCSVSuccess = moResourceLoader.GetString("MessageContentExportCSVSuccess");
+					if (string.IsNullOrEmpty(msMessageContentExportCSVSuccess))
+					{
+						msMessageContentExportCSVSuccess = MESSAGE_CONTENT_EXPORT_C_S_V_SUCCESS;
+					}
+				}
+				return msMessageContentExportCSVSuccess;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentExportEmptyGPSData</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_EXPORT_EMPTY_G_P_S_DATA = "seems that current activity doesn't contains valid gps data. ¿export anyway?";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentExportEmptyGPSData"/>.
+		/// </summary>
+		static string msMessageContentExportEmptyGPSData;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentExportEmptyGPSData</b> (<i>"seems that current activity doesn't contains valid gps data. ¿export anyway?"</i>).
+		/// </summary>
+		public static string MessageContentExportEmptyGPSData
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentExportEmptyGPSData))
+				{
+					msMessageContentExportEmptyGPSData = moResourceLoader.GetString("MessageContentExportEmptyGPSData");
+					if (string.IsNullOrEmpty(msMessageContentExportEmptyGPSData))
+					{
+						msMessageContentExportEmptyGPSData = MESSAGE_CONTENT_EXPORT_EMPTY_G_P_S_DATA;
+					}
+				}
+				return msMessageContentExportEmptyGPSData;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentExportGPXFail</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_EXPORT_G_P_X_FAIL = "activity couldn't be exported to: {0}";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentExportGPXFail"/>.
+		/// </summary>
+		static string msMessageContentExportGPXFail;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentExportGPXFail</b> (<i>"activity couldn't be exported to: {0}"</i>).
+		/// </summary>
+		public static string MessageContentExportGPXFail
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentExportGPXFail))
+				{
+					msMessageContentExportGPXFail = moResourceLoader.GetString("MessageContentExportGPXFail");
+					if (string.IsNullOrEmpty(msMessageContentExportGPXFail))
+					{
+						msMessageContentExportGPXFail = MESSAGE_CONTENT_EXPORT_G_P_X_FAIL;
+					}
+				}
+				return msMessageContentExportGPXFail;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentExportGPXSuccess</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_EXPORT_G_P_X_SUCCESS = "activity exported to: {0}";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentExportGPXSuccess"/>.
+		/// </summary>
+		static string msMessageContentExportGPXSuccess;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentExportGPXSuccess</b> (<i>"activity exported to: {0}"</i>).
+		/// </summary>
+		public static string MessageContentExportGPXSuccess
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentExportGPXSuccess))
+				{
+					msMessageContentExportGPXSuccess = moResourceLoader.GetString("MessageContentExportGPXSuccess");
+					if (string.IsNullOrEmpty(msMessageContentExportGPXSuccess))
+					{
+						msMessageContentExportGPXSuccess = MESSAGE_CONTENT_EXPORT_G_P_X_SUCCESS;
+					}
+				}
+				return msMessageContentExportGPXSuccess;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentSelectActivityType</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_SELECT_ACTIVITY_TYPE = "select at least one activity type to filter.";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentSelectActivityType"/>.
+		/// </summary>
+		static string msMessageContentSelectActivityType;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentSelectActivityType</b> (<i>"select at least one activity type to filter."</i>).
+		/// </summary>
+		public static string MessageContentSelectActivityType
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentSelectActivityType))
+				{
+					msMessageContentSelectActivityType = moResourceLoader.GetString("MessageContentSelectActivityType");
+					if (string.IsNullOrEmpty(msMessageContentSelectActivityType))
+					{
+						msMessageContentSelectActivityType = MESSAGE_CONTENT_SELECT_ACTIVITY_TYPE;
+					}
+				}
+				return msMessageContentSelectActivityType;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageTitleExportCSV</b>.
+		/// </summary>
+		const string MESSAGE_TITLE_EXPORT_C_S_V = "export csv";
+		/// <summary>
+		/// Inner member for property <see cref="MessageTitleExportCSV"/>.
+		/// </summary>
+		static string msMessageTitleExportCSV;
+		/// <summary>
+		/// Gets string value for resource <b>MessageTitleExportCSV</b> (<i>"export csv"</i>).
+		/// </summary>
+		public static string MessageTitleExportCSV
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageTitleExportCSV))
+				{
+					msMessageTitleExportCSV = moResourceLoader.GetString("MessageTitleExportCSV");
+					if (string.IsNullOrEmpty(msMessageTitleExportCSV))
+					{
+						msMessageTitleExportCSV = MESSAGE_TITLE_EXPORT_C_S_V;
+					}
+				}
+				return msMessageTitleExportCSV;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageTitleExportGPX</b>.
+		/// </summary>
+		const string MESSAGE_TITLE_EXPORT_G_P_X = "export gpx";
+		/// <summary>
+		/// Inner member for property <see cref="MessageTitleExportGPX"/>.
+		/// </summary>
+		static string msMessageTitleExportGPX;
+		/// <summary>
+		/// Gets string value for resource <b>MessageTitleExportGPX</b> (<i>"export gpx"</i>).
+		/// </summary>
+		public static string MessageTitleExportGPX
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageTitleExportGPX))
+				{
+					msMessageTitleExportGPX = moResourceLoader.GetString("MessageTitleExportGPX");
+					if (string.IsNullOrEmpty(msMessageTitleExportGPX))
+					{
+						msMessageTitleExportGPX = MESSAGE_TITLE_EXPORT_G_P_X;
+					}
+				}
+				return msMessageTitleExportGPX;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageTitleFilterActivities</b>.
+		/// </summary>
+		const string MESSAGE_TITLE_FILTER_ACTIVITIES = "filter activities";
+		/// <summary>
+		/// Inner member for property <see cref="MessageTitleFilterActivities"/>.
+		/// </summary>
+		static string msMessageTitleFilterActivities;
+		/// <summary>
+		/// Gets string value for resource <b>MessageTitleFilterActivities</b> (<i>"filter activities"</i>).
+		/// </summary>
+		public static string MessageTitleFilterActivities
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageTitleFilterActivities))
+				{
+					msMessageTitleFilterActivities = moResourceLoader.GetString("MessageTitleFilterActivities");
+					if (string.IsNullOrEmpty(msMessageTitleFilterActivities))
+					{
+						msMessageTitleFilterActivities = MESSAGE_TITLE_FILTER_ACTIVITIES;
+					}
+				}
+				return msMessageTitleFilterActivities;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextDistanceUnitShortKilometer.Text</b>.
+		/// </summary>
+		const string TEXT_DISTANCE_UNIT_SHORT_KILOMETER_TEXT = "km";
+		/// <summary>
+		/// Inner member for property <see cref="TextDistanceUnitShortKilometerText"/>.
+		/// </summary>
+		static string msTextDistanceUnitShortKilometerText;
+		/// <summary>
+		/// Gets string value for resource <b>TextDistanceUnitShortKilometer.Text</b> (<i>"km"</i>).
+		/// </summary>
+		public static string TextDistanceUnitShortKilometerText
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextDistanceUnitShortKilometerText))
+				{
+					msTextDistanceUnitShortKilometerText = moResourceLoader.GetString("TextDistanceUnitShortKilometer.Text");
+					if (string.IsNullOrEmpty(msTextDistanceUnitShortKilometerText))
+					{
+						msTextDistanceUnitShortKilometerText = TEXT_DISTANCE_UNIT_SHORT_KILOMETER_TEXT;
+					}
+				}
+				return msTextDistanceUnitShortKilometerText;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextDistanceUnitShortMile.Text</b>.
+		/// </summary>
+		const string TEXT_DISTANCE_UNIT_SHORT_MILE_TEXT = "mi";
+		/// <summary>
+		/// Inner member for property <see cref="TextDistanceUnitShortMileText"/>.
+		/// </summary>
+		static string msTextDistanceUnitShortMileText;
+		/// <summary>
+		/// Gets string value for resource <b>TextDistanceUnitShortMile.Text</b> (<i>"mi"</i>).
+		/// </summary>
+		public static string TextDistanceUnitShortMileText
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextDistanceUnitShortMileText))
+				{
+					msTextDistanceUnitShortMileText = moResourceLoader.GetString("TextDistanceUnitShortMile.Text");
+					if (string.IsNullOrEmpty(msTextDistanceUnitShortMileText))
+					{
+						msTextDistanceUnitShortMileText = TEXT_DISTANCE_UNIT_SHORT_MILE_TEXT;
+					}
+				}
+				return msTextDistanceUnitShortMileText;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextNoSplitsDisclaimer.Text</b>.
+		/// </summary>
+		const string TEXT_NO_SPLITS_DISCLAIMER_TEXT = "Split data not found for current activity";
+		/// <summary>
+		/// Inner member for property <see cref="TextNoSplitsDisclaimerText"/>.
+		/// </summary>
+		static string msTextNoSplitsDisclaimerText;
+		/// <summary>
+		/// Gets string value for resource <b>TextNoSplitsDisclaimer.Text</b> (<i>"Split data not found for current activity"</i>).
+		/// </summary>
+		public static string TextNoSplitsDisclaimerText
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextNoSplitsDisclaimerText))
+				{
+					msTextNoSplitsDisclaimerText = moResourceLoader.GetString("TextNoSplitsDisclaimer.Text");
+					if (string.IsNullOrEmpty(msTextNoSplitsDisclaimerText))
+					{
+						msTextNoSplitsDisclaimerText = TEXT_NO_SPLITS_DISCLAIMER_TEXT;
+					}
+				}
+				return msTextNoSplitsDisclaimerText;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextSettingsAboutHeader.Label</b>.
+		/// </summary>
+		const string TEXT_SETTINGS_ABOUT_HEADER_LABEL = "about";
+		/// <summary>
+		/// Inner member for property <see cref="TextSettingsAboutHeaderLabel"/>.
+		/// </summary>
+		static string msTextSettingsAboutHeaderLabel;
+		/// <summary>
+		/// Gets string value for resource <b>TextSettingsAboutHeader.Label</b> (<i>"about"</i>).
+		/// </summary>
+		public static string TextSettingsAboutHeaderLabel
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextSettingsAboutHeaderLabel))
+				{
+					msTextSettingsAboutHeaderLabel = moResourceLoader.GetString("TextSettingsAboutHeader.Label");
+					if (string.IsNullOrEmpty(msTextSettingsAboutHeaderLabel))
+					{
+						msTextSettingsAboutHeaderLabel = TEXT_SETTINGS_ABOUT_HEADER_LABEL;
+					}
+				}
+				return msTextSettingsAboutHeaderLabel;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextSettingsAppDescription.Text</b>.
+		/// </summary>
+		const string TEXT_SETTINGS_APP_DESCRIPTION_TEXT = "eXport your Microsoft Band activities:\r\n- Filter by Type/Period\r\n- See Details/Heart Rate/Splits/Map\r\n- Export List to CSV\r\n- Export GPS activities to GPX (future support planned for TCX)";
+		/// <summary>
+		/// Inner member for property <see cref="TextSettingsAppDescriptionText"/>.
+		/// </summary>
+		static string msTextSettingsAppDescriptionText;
+		/// <summary>
+		/// Gets string value for resource <b>TextSettingsAppDescription.Text</b> (<i>"eXport your Microsoft Band activities: - Filter by Type/Period - See Details/Heart Rate/Splits/Map - Export List to CSV - Export GPS activities to GPX (future support planned for TCX)"</i>).
+		/// </summary>
+		public static string TextSettingsAppDescriptionText
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextSettingsAppDescriptionText))
+				{
+					msTextSettingsAppDescriptionText = moResourceLoader.GetString("TextSettingsAppDescription.Text");
+					if (string.IsNullOrEmpty(msTextSettingsAppDescriptionText))
+					{
+						msTextSettingsAppDescriptionText = TEXT_SETTINGS_APP_DESCRIPTION_TEXT;
+					}
+				}
+				return msTextSettingsAppDescriptionText;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextSettingsServicesHeader.Label</b>.
+		/// </summary>
+		const string TEXT_SETTINGS_SERVICES_HEADER_LABEL = "services";
+		/// <summary>
+		/// Inner member for property <see cref="TextSettingsServicesHeaderLabel"/>.
+		/// </summary>
+		static string msTextSettingsServicesHeaderLabel;
+		/// <summary>
+		/// Gets string value for resource <b>TextSettingsServicesHeader.Label</b> (<i>"services"</i>).
+		/// </summary>
+		public static string TextSettingsServicesHeaderLabel
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextSettingsServicesHeaderLabel))
+				{
+					msTextSettingsServicesHeaderLabel = moResourceLoader.GetString("TextSettingsServicesHeader.Label");
+					if (string.IsNullOrEmpty(msTextSettingsServicesHeaderLabel))
+					{
+						msTextSettingsServicesHeaderLabel = TEXT_SETTINGS_SERVICES_HEADER_LABEL;
+					}
+				}
+				return msTextSettingsServicesHeaderLabel;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextSplitAvgHRHeader.Text</b>.
+		/// </summary>
+		const string TEXT_SPLIT_AVG_H_R_HEADER_TEXT = "avg hr";
+		/// <summary>
+		/// Inner member for property <see cref="TextSplitAvgHRHeaderText"/>.
+		/// </summary>
+		static string msTextSplitAvgHRHeaderText;
+		/// <summary>
+		/// Gets string value for resource <b>TextSplitAvgHRHeader.Text</b> (<i>"avg hr"</i>).
+		/// </summary>
+		public static string TextSplitAvgHRHeaderText
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextSplitAvgHRHeaderText))
+				{
+					msTextSplitAvgHRHeaderText = moResourceLoader.GetString("TextSplitAvgHRHeader.Text");
+					if (string.IsNullOrEmpty(msTextSplitAvgHRHeaderText))
+					{
+						msTextSplitAvgHRHeaderText = TEXT_SPLIT_AVG_H_R_HEADER_TEXT;
+					}
+				}
+				return msTextSplitAvgHRHeaderText;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextSplitDurationHeader.Text</b>.
+		/// </summary>
+		const string TEXT_SPLIT_DURATION_HEADER_TEXT = "duration";
+		/// <summary>
+		/// Inner member for property <see cref="TextSplitDurationHeaderText"/>.
+		/// </summary>
+		static string msTextSplitDurationHeaderText;
+		/// <summary>
+		/// Gets string value for resource <b>TextSplitDurationHeader.Text</b> (<i>"duration"</i>).
+		/// </summary>
+		public static string TextSplitDurationHeaderText
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextSplitDurationHeaderText))
+				{
+					msTextSplitDurationHeaderText = moResourceLoader.GetString("TextSplitDurationHeader.Text");
+					if (string.IsNullOrEmpty(msTextSplitDurationHeaderText))
+					{
+						msTextSplitDurationHeaderText = TEXT_SPLIT_DURATION_HEADER_TEXT;
+					}
+				}
+				return msTextSplitDurationHeaderText;
 			}
 		}
 				

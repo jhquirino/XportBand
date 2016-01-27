@@ -131,7 +131,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Auto"
                               BorderThickness="0,1,0,1"
-                              BorderBrush="{StaticResource SystemControlHighlightChromeHighBrush}"
+                              BorderBrush="{StaticResource SystemControlHighlightListAccentLowBrush}"
                               Visibility="{Binding IsRunningRequest, Converter={StaticResource BooleanToVisibilityConverterReversed}}">
                     <Grid Margin="0,5,0,5">
                         <!--#region Columns/Rows definition-->
@@ -312,14 +312,20 @@
                                    HorizontalAlignment="Right" />
                         </Border>
                         <Border Grid.Row="4"
-                            Grid.Column="2" 
-                            BorderThickness="0,0,0,0.5"
-                            BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                            Visibility="{Binding TotalDistance, Converter={StaticResource NullToVisibilityConverter}}">
-                            <TextBlock Margin="5"
+                                Grid.Column="2" 
+                                BorderThickness="0,0,0,0.5"
+                                BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
+                                Visibility="{Binding TotalDistance, Converter={StaticResource NullToVisibilityConverter}}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="5"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Text="{Binding TotalDistance, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:N2}'}" />
+                                <TextBlock Margin="5"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Text="{Binding DistanceUnitShort}"/>
+                            </StackPanel>
                         </Border>
                         <!--#endregion-->
                         <!--#region Pace -->
@@ -365,7 +371,7 @@
                                 Grid.Row="6"
                                 Grid.Column="0"
                                 Background="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.DistanceSummary, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsElevationAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Path Width="16"
                                   Height="16"
                                   Stretch="Uniform"
@@ -380,7 +386,7 @@
                                 Grid.Row="6"
                                 Grid.Column="1"
                                 Background="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.DistanceSummary, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsElevationAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextActivityElevation"
                                        Margin="5"
                                        VerticalAlignment="Top"
@@ -391,24 +397,28 @@
                                 Grid.Column="2"
                                 BorderThickness="0,0,0,0.5"
                                 BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.DistanceSummary, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsElevationAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <StackPanel x:Name="DetailsElevationStack" Orientation="Vertical">
                                 <TextBlock Margin="0,5,10,5" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Left" 
-                                           Text="{Binding Activity.DistanceSummary.MaxElevation, Converter={StaticResource StringFormatConverter}, ConverterParameter='↑{0:N2}'}" />
+                                           Text="{Binding MaxElevation, Converter={StaticResource StringFormatConverter}, ConverterParameter='↑{0:N2}'}"
+                                           Visibility="{Binding MaxElevation, Converter={StaticResource NullToVisibilityConverter}}" />
                                 <TextBlock Margin="0,5,10,5" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Left" 
-                                           Text="{Binding Activity.DistanceSummary.MinElevation, Converter={StaticResource StringFormatConverter}, ConverterParameter='↓{0:N2}'}" />
+                                           Text="{Binding MinElevation, Converter={StaticResource StringFormatConverter}, ConverterParameter='↓{0:N2}'}"
+                                           Visibility="{Binding MinElevation, Converter={StaticResource NullToVisibilityConverter}}" />
                                 <TextBlock Margin="0,5,10,5" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Left" 
-                                           Text="{Binding Activity.DistanceSummary.ElevationGain, Converter={StaticResource StringFormatConverter}, ConverterParameter='+{0:N2}'}" />
+                                           Text="{Binding ElevationGain, Converter={StaticResource StringFormatConverter}, ConverterParameter='+{0:N2}'}"
+                                           Visibility="{Binding ElevationGain, Converter={StaticResource NullToVisibilityConverter}}" />
                                 <TextBlock Margin="0,5,10,5" 
                                            VerticalAlignment="Center" 
                                            HorizontalAlignment="Left" 
-                                           Text="{Binding Activity.DistanceSummary.ElevationLoss, Converter={StaticResource StringFormatConverter}, ConverterParameter='-{0:N2}'}" />
+                                           Text="{Binding ElevationLoss, Converter={StaticResource StringFormatConverter}, ConverterParameter='-{0:N2}'}"
+                                           Visibility="{Binding ElevationLoss, Converter={StaticResource NullToVisibilityConverter}}" />
                             </StackPanel>
                         </Border>
                         <!--#endregion-->
@@ -428,7 +438,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Auto"
                               BorderThickness="0,1,0,1"
-                              BorderBrush="{StaticResource SystemControlHighlightChromeHighBrush}"
+                              BorderBrush="{StaticResource SystemControlHighlightListAccentLowBrush}"
                               Visibility="{Binding IsRunningRequest, Converter={StaticResource BooleanToVisibilityConverterReversed}}">
                     <Grid Margin="0,5,0,5">
                         <!--#region ColumnDefinitions -->
@@ -532,7 +542,7 @@
                                 Grid.ColumnSpan="2"
                                 Margin="0,10,0,0"
                                 Background="{ThemeResource SystemControlHighlightBaseMediumLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal"
                                         Margin="5,10"
                                         VerticalAlignment="Center"
@@ -551,7 +561,7 @@
                         <Border Grid.Row="4"
                                 Grid.Column="0"
                                 Background="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextHeartRateZone"
                                    Margin="5"
                                    VerticalAlignment="Center"
@@ -560,7 +570,7 @@
                         <Border Grid.Row="4"
                                 Grid.Column="1"
                                 Background="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextHeartRateMinutes"
                                    Margin="5"
                                    VerticalAlignment="Center"
@@ -571,7 +581,7 @@
                         <Border Grid.Row="5"
                                 Grid.Column="0"
                                 Background="LightGray"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextHeartRateZoneUnderHealthy"
                                        Margin="5,0,5,0"
                                        VerticalAlignment="Center"
@@ -581,7 +591,7 @@
                                 Grid.Column="1"
                                 BorderThickness="0,0,0,0.5"
                                 BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock Margin="5,0,5,0"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"
@@ -592,7 +602,7 @@
                         <Border Grid.Row="6"
                                 Grid.Column="0"
                                 Background="Green"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextHeartRateZoneHealthy"
                                        Margin="5,0,5,0"
                                        VerticalAlignment="Center"
@@ -602,7 +612,7 @@
                                 Grid.Column="1"
                                 BorderThickness="0,0,0,0.5"
                                 BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock Margin="5,0,5,0"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"
@@ -613,7 +623,7 @@
                         <Border Grid.Row="7"
                                 Grid.Column="0"
                                 Background="LimeGreen"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextHeartRateZoneFitness"
                                        Margin="5,0,5,0"
                                        VerticalAlignment="Center"
@@ -623,7 +633,7 @@
                                 Grid.Column="1"
                                 BorderThickness="0,0,0,0.5"
                                 BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock Margin="5,0,5,0"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"
@@ -634,7 +644,7 @@
                         <Border Grid.Row="8"
                                 Grid.Column="0"
                                 Background="Gold"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextHeartRateZoneAerobic"
                                        Margin="5,0,5,0"
                                        VerticalAlignment="Center"
@@ -644,7 +654,7 @@
                                 Grid.Column="1"
                                 BorderThickness="0,0,0,0.5"
                                 BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock Margin="5,0,5,0"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"
@@ -655,7 +665,7 @@
                         <Border Grid.Row="9"
                                 Grid.Column="0"
                                 Background="Orange"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextHeartRateZoneAnaerobic"
                                        Margin="5,0,5,0"
                                        VerticalAlignment="Center"
@@ -665,7 +675,7 @@
                                 Grid.Column="1"
                                 BorderThickness="0,0,0,0.5"
                                 BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock Margin="5,0,5,0"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"
@@ -676,7 +686,7 @@
                         <Border Grid.Row="10"
                                 Grid.Column="0"
                                 Background="Red"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextHeartRateZoneRedline"
                                        Margin="5,0,5,0"
                                        VerticalAlignment="Center"
@@ -686,7 +696,7 @@
                                 Grid.Column="1"
                                 BorderThickness="0,0,0,0.5"
                                 BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock Margin="5,0,5,0"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"
@@ -697,7 +707,7 @@
                         <Border Grid.Row="11"
                                 Grid.Column="0"
                                 Background="DarkRed"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock x:Uid="TextHeartRateZoneOverRedline"
                                        Margin="5,0,5,0"
                                        VerticalAlignment="Center"
@@ -707,7 +717,7 @@
                                 Grid.Column="1"
                                 BorderThickness="0,0,0,0.5"
                                 BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}"
-                                Visibility="{Binding Activity.PerformanceSummary.HeartRateZones, Converter={StaticResource NullToVisibilityConverter}}">
+                                Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <TextBlock Margin="5,0,5,0"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"
@@ -721,7 +731,8 @@
                                         Grid.ColumnSpan="2"
                                         Margin="5"
                                         MinHeight="250"
-                                        Padding="0">
+                                        Padding="0"
+                                        Visibility="{Binding IsHeartRateZonesAvailable, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <!--#region LegendStyle-->
                             <charting:Chart.LegendStyle>
                                 <Style TargetType="datavis:Legend">
@@ -836,16 +847,16 @@
                                                                 </ToolTipService.ToolTip>
                                                             </Path>
                                                             <!--#endregion-->
-                                                            <!--#region PieDataPoint SelectionHighlight-->
+                                                            <!--#region PieDataPoint Highlight-->
                                                             <Path x:Name="SelectionHighlight"
 																  Data="{TemplateBinding GeometrySelection}"
-																  Fill="{ThemeResource SystemControlHighlightListAccentHighBrush}"
+																  Fill="{ThemeResource SystemControlHighlightBaseLowBrush}"
 																  StrokeMiterLimit="1"
 																  IsHitTestVisible="False"
 																  Opacity="0" />
                                                             <Path x:Name="MouseOverHighlight"
 																  Data="{TemplateBinding GeometryHighlight}"
-																  Fill="{ThemeResource SystemControlHighlightBaseLowBrush}"
+																  Fill="{ThemeResource SystemControlHighlightListAccentHighBrush}"
 																  StrokeMiterLimit="1"
 																  IsHitTestVisible="False"
 																  Opacity="0" />
@@ -870,10 +881,135 @@
             <!--#endregion-->
             <!--#region Splits-->
             <PivotItem>
+                <!--#region Header-->
                 <PivotItem.Header>
                     <vw:TabHeader x:Uid="TextActivitySplitsHeader" Glyph="&#xE71D;" />
                 </PivotItem.Header>
-                <TextBlock>Splits</TextBlock>
+                <!--#endregion-->
+                <!--#region Content-->
+                <Grid BorderThickness="0,1,0,1"
+                      BorderBrush="{StaticResource SystemControlHighlightListAccentLowBrush}"
+                      Visibility="{Binding IsRunningRequest, Converter={StaticResource BooleanToVisibilityConverterReversed}}">
+                    <!--#region Column/Row Definitions -->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.25*" />
+                        <ColumnDefinition Width="0.40*" />
+                        <ColumnDefinition Width="0.35*" />
+                    </Grid.ColumnDefinitions>
+                    <!--#endregion-->
+                    <!--#region Headers-->
+                    <!-- Split no (Distance Unit) -->
+                    <Border Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="0,5,0,0"
+                            Background="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                        <TextBlock VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center"
+                                   Margin="5"
+                                   Text="{Binding DistanceUnitShort}" />
+                    </Border>
+                    <!-- Duration -->
+                    <Border Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="1,5,0,0"
+                            Background="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                        <TextBlock x:Uid="TextSplitDurationHeader"
+                                   VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center"
+                                   Margin="5"/>
+                    </Border>
+                    <!-- Average Heart Rate -->
+                    <Border Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="1,5,0,0"
+                            Background="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                        <TextBlock x:Uid="TextSplitAvgHRHeader"
+                                   VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center"
+                                   Margin="5"/>
+                    </Border>
+                    <!--#endregion-->
+                    <!--#region Details-->
+                    <!-- Splits data -->
+                    <ScrollViewer Grid.Row="1"
+                                  Grid.Column="0"
+                                  Grid.ColumnSpan="3"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto"
+                                  Visibility="{Binding Splits, Converter={StaticResource NullToVisibilityConverter}}">
+                        <ListView ItemsSource="{Binding Splits}">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid BorderThickness="0,0,0,1"
+                                          BorderBrush="{ThemeResource SystemControlForegroundBaseLowBrush}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.25*" />
+                                            <ColumnDefinition Width="0.40*" />
+                                            <ColumnDefinition Width="0.35*" />
+                                        </Grid.ColumnDefinitions>
+                                        <!-- Split value -->
+                                        <TextBlock Grid.Row="0"
+                                                   Grid.Column="0"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"
+                                                   Margin="5"
+                                                   Text="{Binding Value, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:N2}'}" />
+                                        <!-- Duration -->
+                                        <StackPanel Grid.Row="0"
+                                                    Grid.Column="1"
+                                                    Orientation="Horizontal">
+                                            <TextBlock VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="10,5,5,5"
+                                                       Text="{Binding Duration}" />
+                                            <TextBlock VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="5"
+                                                       Text="{Binding DurationMark}" />
+                                        </StackPanel>
+                                        <!-- Average Heart Rate -->
+                                        <StackPanel Grid.Row="0"
+                                                    Grid.Column="2"
+                                                    Orientation="Horizontal">
+                                            <TextBlock VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="10,5,5,5"
+                                                       Text="{Binding AvgHeartRate}" />
+                                            <TextBlock VerticalAlignment="Center"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="5"
+                                                       Text="{Binding HRMark}" />
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
+                    <!-- No-splits disclaimer -->
+                    <TextBlock x:Uid="TextNoSplitsDisclaimer" 
+                               Grid.Row="1" 
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               VerticalAlignment="Center" 
+                               HorizontalAlignment="Center"
+                               TextWrapping="WrapWholeWords"
+                               Margin="10"
+                               Visibility="{Binding Splits, Converter={StaticResource NullToVisibilityConverterReversed}}"/>
+                    <!--#endregion-->
+                </Grid>
+                <!--#endregion-->
             </PivotItem>
             <!--#endregion-->
             <!--#region Map-->
@@ -885,11 +1021,10 @@
                 <!--#endregion-->
                 <!--#region Content-->
                 <Grid BorderThickness="0,1,0,1"
-                      BorderBrush="{StaticResource SystemControlHighlightChromeHighBrush}"
+                      BorderBrush="{StaticResource SystemControlHighlightListAccentLowBrush}"
                       Visibility="{Binding IsRunningRequest, Converter={StaticResource BooleanToVisibilityConverterReversed}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -921,7 +1056,8 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <CommandBar IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}">
+        <CommandBar IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                    Visibility="{Binding MapPath, Converter={StaticResource NullToVisibilityConverter}}">
             <AppBarButton x:Uid="AppBarButtonExportGpx" 
                           Command="{Binding ExportToGpxCommand}">
                 <AppBarButton.Icon>

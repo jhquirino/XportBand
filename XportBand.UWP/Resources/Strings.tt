@@ -12,7 +12,7 @@
 <#@ import namespace="System.Xml.Linq" #>
 //-----------------------------------------------------------------------
 // <copyright file="Strings.cs" company="Jorge Alberto Hernández Quirino">
-// Copyright (c) Jorge Alberto Hernández Quirino 2015. All rights reserved.
+// Copyright (c) Jorge Alberto Hernández Quirino 2015-2016. All rights reserved.
 // </copyright>
 // <author>Jorge Alberto Hernández Quirino</author>
 //-----------------------------------------------------------------------
@@ -53,13 +53,13 @@ namespace XportBand.Resources
 		/// <summary>
 		/// Key for resource string <b><#=lsResourceKey#></b>.
 		/// </summary>
-		const string <#=lsResourceKeyUpper#> = "<#=lsResourceValue#>";
+		const string <#=lsResourceKeyUpper#> = "<#=ReplaceNewLine(lsResourceValue, null)#>";
 		/// <summary>
 		/// Inner member for property <see cref="<#=lsResourceKeySafe#>"/>.
 		/// </summary>
 		static string ms<#=lsResourceKeySafe#>;
 		/// <summary>
-		/// Gets string value for resource <b><#=lsResourceKey#></b> (<i>"<#=lsResourceValue#>"</i>).
+		/// Gets string value for resource <b><#=lsResourceKey#></b> (<i>"<#=ReplaceNewLine(lsResourceValue, " ")#>"</i>).
 		/// </summary>
 		public static string <#=lsResourceKeySafe#>
 		{
@@ -135,5 +135,17 @@ namespace XportBand.Resources
 			lsUpperCase += lsTmp.ToUpper();
 		}
 		return lsUpperCase;
+	}
+
+	public string ReplaceNewLine(string value, string newLineString)
+	{
+		string lsReplace = value;
+		string lsPattern = @"(\r\n|\r|\n)";
+		Regex loRegEx = new Regex(lsPattern);
+		if (string.IsNullOrEmpty(newLineString))
+			lsReplace = loRegEx.Replace(value, "\\r\\n");
+		else
+			lsReplace = loRegEx.Replace(value, newLineString);
+		return lsReplace;
 	}
 #>

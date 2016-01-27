@@ -15,10 +15,11 @@ namespace XportBand.ViewModel
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Windows.Input;
+    using Windows.ApplicationModel;
     using Windows.UI.Core;
     using Windows.UI.Xaml.Controls;
-    using System.Linq;
 
     /// <summary>
     /// ViewModel for Settings view.
@@ -105,6 +106,11 @@ namespace XportBand.ViewModel
         private bool mbIsRunningRequest = false;
 
         /// <summary>
+        /// Inner member for <see cref="AppVersion"/> property.
+        /// </summary>
+        private string msAppVersion;
+
+        /// <summary>
         /// Name of current running service.
         /// </summary>
         private string msRunningService;
@@ -133,8 +139,7 @@ namespace XportBand.ViewModel
 
         /// <summary>
         /// Gets or sets a value indicating whether Microsoft Health request is running.
-        /// </summary>> if this instance is ms health running; otherwise, <see langword="false" />.
-        /// </value>
+        /// </summary>
         public bool IsMSHealthRunning
         {
             get { return mbIsMSHealthRunning; }
@@ -191,6 +196,15 @@ namespace XportBand.ViewModel
         }
 
         /// <summary>
+        /// Gets or sets the application version.
+        /// </summary>
+        public string AppVersion
+        {
+            get { return msAppVersion; }
+            set { Set<string>(() => AppVersion, ref msAppVersion, value); }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether this instance is running request.
         /// </summary>
         public bool IsRunningRequest
@@ -204,27 +218,18 @@ namespace XportBand.ViewModel
         #region Commands
 
         /// <summary>
-        /// Gets the sign in ms health command.
+        /// Gets the command to execute: Sign-in Microsoft Health.
         /// </summary>
-        /// <value>
-        /// The sign in ms health command.
-        /// </value>
         public ICommand SignInMSHealthCommand { get; private set; }
 
         /// <summary>
-        /// Gets the sign out ms health command.
+        /// Gets the command to execute: Sign-out Microsoft Health.
         /// </summary>
-        /// <value>
-        /// The sign out ms health command.
-        /// </value>
         public ICommand SignOutMSHealthCommand { get; private set; }
 
         /// <summary>
-        /// Gets the navigation completed command.
+        /// Gets the command to execute: NavigationCompleted event.
         /// </summary>
-        /// <value>
-        /// The navigation completed command.
-        /// </value>
         public ICommand NavigationCompletedCommand { get; private set; }
 
         #endregion
@@ -247,6 +252,15 @@ namespace XportBand.ViewModel
             SignInMSHealthCommand = new RelayCommand(SignInMSHealth, () => true);
             SignOutMSHealthCommand = new RelayCommand(SignOutMSHealth, () => true);
             NavigationCompletedCommand = new RelayCommand<object>(NavigationCompleted, (args) => true);
+            // Get AppVersion
+            Package loPackage = Package.Current;
+            PackageId loPackageId = loPackage.Id;
+            PackageVersion loPackageVersion = loPackageId.Version;
+            AppVersion = string.Format("v{0}.{1}.{2}.{3}",
+                                       loPackageVersion.Major,
+                                       loPackageVersion.Minor,
+                                       loPackageVersion.Build,
+                                       loPackageVersion.Revision);
             // Handle Back button requests
             SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
             {
