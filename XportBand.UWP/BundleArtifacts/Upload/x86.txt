@@ -1,2 +1,2 @@
-MainPackage=D:\GitHub\XportBand\bin\x86\Release\Upload\XportBand.UWP_1.1.0.0_x86.appx
-SymbolPackage=D:\GitHub\XportBand\AppPackages\XportBand.UWP_1.1.0.0\XportBand.UWP_1.1.0.0_x86.appxsym
+MainPackage=D:\GitHub\XportBand\bin\x86\Release\Upload\XportBand.UWP_0.1.0.0_x86.appx
+SymbolPackage=D:\GitHub\XportBand\AppPackages\XportBand.UWP_0.1.0.0\XportBand.UWP_0.1.0.0_x86.appxsym

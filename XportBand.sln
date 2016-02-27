@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XportBand.UWP", "XportBand.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSHealthAPI.UWP", "MSHealthAPI\MSHealthAPI.UWP.csproj", "{B965928D-C284-4169-8187-2F9C009FB2B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NikePlusAPI.UWP", "NikePlusAPI\NikePlusAPI.UWP.csproj", "{74BE7141-8A7D-4E39-8C01-6A2661011C44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,22 @@ Global
 		{B965928D-C284-4169-8187-2F9C009FB2B0}.Release|x64.Build.0 = Release|x64
 		{B965928D-C284-4169-8187-2F9C009FB2B0}.Release|x86.ActiveCfg = Release|x86
 		{B965928D-C284-4169-8187-2F9C009FB2B0}.Release|x86.Build.0 = Release|x86
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Debug|ARM.ActiveCfg = Debug|ARM
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Debug|ARM.Build.0 = Debug|ARM
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Debug|x64.ActiveCfg = Debug|x64
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Debug|x64.Build.0 = Debug|x64
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Debug|x86.ActiveCfg = Debug|x86
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Debug|x86.Build.0 = Debug|x86
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Release|ARM.ActiveCfg = Release|ARM
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Release|ARM.Build.0 = Release|ARM
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Release|x64.ActiveCfg = Release|x64
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Release|x64.Build.0 = Release|x64
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Release|x86.ActiveCfg = Release|x86
+		{74BE7141-8A7D-4E39-8C01-6A2661011C44}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

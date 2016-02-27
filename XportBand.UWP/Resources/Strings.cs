@@ -2261,56 +2261,56 @@ namespace XportBand.Resources
 		}
 				
 		/// <summary>
-		/// Key for resource string <b>MessageContentExportGPXFail</b>.
+		/// Key for resource string <b>MessageContentActivityExportFail</b>.
 		/// </summary>
-		const string MESSAGE_CONTENT_EXPORT_G_P_X_FAIL = "activity couldn't be exported to: {0}";
+		const string MESSAGE_CONTENT_ACTIVITY_EXPORT_FAIL = "activity couldn't be exported to: {0}";
 		/// <summary>
-		/// Inner member for property <see cref="MessageContentExportGPXFail"/>.
+		/// Inner member for property <see cref="MessageContentActivityExportFail"/>.
 		/// </summary>
-		static string msMessageContentExportGPXFail;
+		static string msMessageContentActivityExportFail;
 		/// <summary>
-		/// Gets string value for resource <b>MessageContentExportGPXFail</b> (<i>"activity couldn't be exported to: {0}"</i>).
+		/// Gets string value for resource <b>MessageContentActivityExportFail</b> (<i>"activity couldn't be exported to: {0}"</i>).
 		/// </summary>
-		public static string MessageContentExportGPXFail
+		public static string MessageContentActivityExportFail
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(msMessageContentExportGPXFail))
+				if (string.IsNullOrEmpty(msMessageContentActivityExportFail))
 				{
-					msMessageContentExportGPXFail = moResourceLoader.GetString("MessageContentExportGPXFail");
-					if (string.IsNullOrEmpty(msMessageContentExportGPXFail))
+					msMessageContentActivityExportFail = moResourceLoader.GetString("MessageContentActivityExportFail");
+					if (string.IsNullOrEmpty(msMessageContentActivityExportFail))
 					{
-						msMessageContentExportGPXFail = MESSAGE_CONTENT_EXPORT_G_P_X_FAIL;
+						msMessageContentActivityExportFail = MESSAGE_CONTENT_ACTIVITY_EXPORT_FAIL;
 					}
 				}
-				return msMessageContentExportGPXFail;
+				return msMessageContentActivityExportFail;
 			}
 		}
 				
 		/// <summary>
-		/// Key for resource string <b>MessageContentExportGPXSuccess</b>.
+		/// Key for resource string <b>MessageContentActivityExportSuccess</b>.
 		/// </summary>
-		const string MESSAGE_CONTENT_EXPORT_G_P_X_SUCCESS = "activity exported to: {0}";
+		const string MESSAGE_CONTENT_ACTIVITY_EXPORT_SUCCESS = "activity exported to: {0}";
 		/// <summary>
-		/// Inner member for property <see cref="MessageContentExportGPXSuccess"/>.
+		/// Inner member for property <see cref="MessageContentActivityExportSuccess"/>.
 		/// </summary>
-		static string msMessageContentExportGPXSuccess;
+		static string msMessageContentActivityExportSuccess;
 		/// <summary>
-		/// Gets string value for resource <b>MessageContentExportGPXSuccess</b> (<i>"activity exported to: {0}"</i>).
+		/// Gets string value for resource <b>MessageContentActivityExportSuccess</b> (<i>"activity exported to: {0}"</i>).
 		/// </summary>
-		public static string MessageContentExportGPXSuccess
+		public static string MessageContentActivityExportSuccess
 		{
 			get
 			{
-				if (string.IsNullOrEmpty(msMessageContentExportGPXSuccess))
+				if (string.IsNullOrEmpty(msMessageContentActivityExportSuccess))
 				{
-					msMessageContentExportGPXSuccess = moResourceLoader.GetString("MessageContentExportGPXSuccess");
-					if (string.IsNullOrEmpty(msMessageContentExportGPXSuccess))
+					msMessageContentActivityExportSuccess = moResourceLoader.GetString("MessageContentActivityExportSuccess");
+					if (string.IsNullOrEmpty(msMessageContentActivityExportSuccess))
 					{
-						msMessageContentExportGPXSuccess = MESSAGE_CONTENT_EXPORT_G_P_X_SUCCESS;
+						msMessageContentActivityExportSuccess = MESSAGE_CONTENT_ACTIVITY_EXPORT_SUCCESS;
 					}
 				}
-				return msMessageContentExportGPXSuccess;
+				return msMessageContentActivityExportSuccess;
 			}
 		}
 				
@@ -2533,13 +2533,13 @@ namespace XportBand.Resources
 		/// <summary>
 		/// Key for resource string <b>TextSettingsAppDescription.Text</b>.
 		/// </summary>
-		const string TEXT_SETTINGS_APP_DESCRIPTION_TEXT = "eXport your Microsoft Band activities:\r\n- Filter by Type/Period\r\n- See Details/Heart Rate/Splits/Map\r\n- Export List to CSV\r\n- Export GPS activities to GPX (future support planned for TCX)";
+		const string TEXT_SETTINGS_APP_DESCRIPTION_TEXT = "eXport your Microsoft Band activities:\r\n- Filter by Type/Period\r\n- See Details/Heart Rate/Splits/Map\r\n- Export List to CSV\r\n- Export GPS activities to GPX/TCX\r\n- Sync to Nike+";
 		/// <summary>
 		/// Inner member for property <see cref="TextSettingsAppDescriptionText"/>.
 		/// </summary>
 		static string msTextSettingsAppDescriptionText;
 		/// <summary>
-		/// Gets string value for resource <b>TextSettingsAppDescription.Text</b> (<i>"eXport your Microsoft Band activities: - Filter by Type/Period - See Details/Heart Rate/Splits/Map - Export List to CSV - Export GPS activities to GPX (future support planned for TCX)"</i>).
+		/// Gets string value for resource <b>TextSettingsAppDescription.Text</b> (<i>"eXport your Microsoft Band activities: - Filter by Type/Period - See Details/Heart Rate/Splits/Map - Export List to CSV - Export GPS activities to GPX/TCX - Sync to Nike+"</i>).
 		/// </summary>
 		public static string TextSettingsAppDescriptionText
 		{
@@ -2635,6 +2635,384 @@ namespace XportBand.Resources
 					}
 				}
 				return msTextSplitDurationHeaderText;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageTitleExportTCX</b>.
+		/// </summary>
+		const string MESSAGE_TITLE_EXPORT_T_C_X = "export tcx";
+		/// <summary>
+		/// Inner member for property <see cref="MessageTitleExportTCX"/>.
+		/// </summary>
+		static string msMessageTitleExportTCX;
+		/// <summary>
+		/// Gets string value for resource <b>MessageTitleExportTCX</b> (<i>"export tcx"</i>).
+		/// </summary>
+		public static string MessageTitleExportTCX
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageTitleExportTCX))
+				{
+					msMessageTitleExportTCX = moResourceLoader.GetString("MessageTitleExportTCX");
+					if (string.IsNullOrEmpty(msMessageTitleExportTCX))
+					{
+						msMessageTitleExportTCX = MESSAGE_TITLE_EXPORT_T_C_X;
+					}
+				}
+				return msMessageTitleExportTCX;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>ButtonNikePlusClear.Content</b>.
+		/// </summary>
+		const string BUTTON_NIKE_PLUS_CLEAR_CONTENT = "clear";
+		/// <summary>
+		/// Inner member for property <see cref="ButtonNikePlusClearContent"/>.
+		/// </summary>
+		static string msButtonNikePlusClearContent;
+		/// <summary>
+		/// Gets string value for resource <b>ButtonNikePlusClear.Content</b> (<i>"clear"</i>).
+		/// </summary>
+		public static string ButtonNikePlusClearContent
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msButtonNikePlusClearContent))
+				{
+					msButtonNikePlusClearContent = moResourceLoader.GetString("ButtonNikePlusClear.Content");
+					if (string.IsNullOrEmpty(msButtonNikePlusClearContent))
+					{
+						msButtonNikePlusClearContent = BUTTON_NIKE_PLUS_CLEAR_CONTENT;
+					}
+				}
+				return msButtonNikePlusClearContent;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>ButtonNikePlusValidate.Content</b>.
+		/// </summary>
+		const string BUTTON_NIKE_PLUS_VALIDATE_CONTENT = "validate";
+		/// <summary>
+		/// Inner member for property <see cref="ButtonNikePlusValidateContent"/>.
+		/// </summary>
+		static string msButtonNikePlusValidateContent;
+		/// <summary>
+		/// Gets string value for resource <b>ButtonNikePlusValidate.Content</b> (<i>"validate"</i>).
+		/// </summary>
+		public static string ButtonNikePlusValidateContent
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msButtonNikePlusValidateContent))
+				{
+					msButtonNikePlusValidateContent = moResourceLoader.GetString("ButtonNikePlusValidate.Content");
+					if (string.IsNullOrEmpty(msButtonNikePlusValidateContent))
+					{
+						msButtonNikePlusValidateContent = BUTTON_NIKE_PLUS_VALIDATE_CONTENT;
+					}
+				}
+				return msButtonNikePlusValidateContent;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextNikePlusPassword.Text</b>.
+		/// </summary>
+		const string TEXT_NIKE_PLUS_PASSWORD_TEXT = "password:";
+		/// <summary>
+		/// Inner member for property <see cref="TextNikePlusPasswordText"/>.
+		/// </summary>
+		static string msTextNikePlusPasswordText;
+		/// <summary>
+		/// Gets string value for resource <b>TextNikePlusPassword.Text</b> (<i>"password:"</i>).
+		/// </summary>
+		public static string TextNikePlusPasswordText
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextNikePlusPasswordText))
+				{
+					msTextNikePlusPasswordText = moResourceLoader.GetString("TextNikePlusPassword.Text");
+					if (string.IsNullOrEmpty(msTextNikePlusPasswordText))
+					{
+						msTextNikePlusPasswordText = TEXT_NIKE_PLUS_PASSWORD_TEXT;
+					}
+				}
+				return msTextNikePlusPasswordText;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>TextNikePlusUser.Text</b>.
+		/// </summary>
+		const string TEXT_NIKE_PLUS_USER_TEXT = "user (e-mail):";
+		/// <summary>
+		/// Inner member for property <see cref="TextNikePlusUserText"/>.
+		/// </summary>
+		static string msTextNikePlusUserText;
+		/// <summary>
+		/// Gets string value for resource <b>TextNikePlusUser.Text</b> (<i>"user (e-mail):"</i>).
+		/// </summary>
+		public static string TextNikePlusUserText
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msTextNikePlusUserText))
+				{
+					msTextNikePlusUserText = moResourceLoader.GetString("TextNikePlusUser.Text");
+					if (string.IsNullOrEmpty(msTextNikePlusUserText))
+					{
+						msTextNikePlusUserText = TEXT_NIKE_PLUS_USER_TEXT;
+					}
+				}
+				return msTextNikePlusUserText;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageButtonMoreDetails</b>.
+		/// </summary>
+		const string MESSAGE_BUTTON_MORE_DETAILS = "more details";
+		/// <summary>
+		/// Inner member for property <see cref="MessageButtonMoreDetails"/>.
+		/// </summary>
+		static string msMessageButtonMoreDetails;
+		/// <summary>
+		/// Gets string value for resource <b>MessageButtonMoreDetails</b> (<i>"more details"</i>).
+		/// </summary>
+		public static string MessageButtonMoreDetails
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageButtonMoreDetails))
+				{
+					msMessageButtonMoreDetails = moResourceLoader.GetString("MessageButtonMoreDetails");
+					if (string.IsNullOrEmpty(msMessageButtonMoreDetails))
+					{
+						msMessageButtonMoreDetails = MESSAGE_BUTTON_MORE_DETAILS;
+					}
+				}
+				return msMessageButtonMoreDetails;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentNikePlusPasswordPattern</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_NIKE_PLUS_PASSWORD_PATTERN = "your password contains a greater than symbol, ampersand or apostrophe (>, & or '), click 'more details' for further information.";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentNikePlusPasswordPattern"/>.
+		/// </summary>
+		static string msMessageContentNikePlusPasswordPattern;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentNikePlusPasswordPattern</b> (<i>"your password contains a greater than symbol, ampersand or apostrophe (>, & or '), click 'more details' for further information."</i>).
+		/// </summary>
+		public static string MessageContentNikePlusPasswordPattern
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentNikePlusPasswordPattern))
+				{
+					msMessageContentNikePlusPasswordPattern = moResourceLoader.GetString("MessageContentNikePlusPasswordPattern");
+					if (string.IsNullOrEmpty(msMessageContentNikePlusPasswordPattern))
+					{
+						msMessageContentNikePlusPasswordPattern = MESSAGE_CONTENT_NIKE_PLUS_PASSWORD_PATTERN;
+					}
+				}
+				return msMessageContentNikePlusPasswordPattern;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentNikePlusValidateFail</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_NIKE_PLUS_VALIDATE_FAIL = "failed to connect to nike+, wait a moment or validate user/pasword, and try again.";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentNikePlusValidateFail"/>.
+		/// </summary>
+		static string msMessageContentNikePlusValidateFail;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentNikePlusValidateFail</b> (<i>"failed to connect to nike+, wait a moment or validate user/pasword, and try again."</i>).
+		/// </summary>
+		public static string MessageContentNikePlusValidateFail
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentNikePlusValidateFail))
+				{
+					msMessageContentNikePlusValidateFail = moResourceLoader.GetString("MessageContentNikePlusValidateFail");
+					if (string.IsNullOrEmpty(msMessageContentNikePlusValidateFail))
+					{
+						msMessageContentNikePlusValidateFail = MESSAGE_CONTENT_NIKE_PLUS_VALIDATE_FAIL;
+					}
+				}
+				return msMessageContentNikePlusValidateFail;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentNikePlusValidateSuccess</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_NIKE_PLUS_VALIDATE_SUCCESS = "successfully connected to nike+.";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentNikePlusValidateSuccess"/>.
+		/// </summary>
+		static string msMessageContentNikePlusValidateSuccess;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentNikePlusValidateSuccess</b> (<i>"successfully connected to nike+."</i>).
+		/// </summary>
+		public static string MessageContentNikePlusValidateSuccess
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentNikePlusValidateSuccess))
+				{
+					msMessageContentNikePlusValidateSuccess = moResourceLoader.GetString("MessageContentNikePlusValidateSuccess");
+					if (string.IsNullOrEmpty(msMessageContentNikePlusValidateSuccess))
+					{
+						msMessageContentNikePlusValidateSuccess = MESSAGE_CONTENT_NIKE_PLUS_VALIDATE_SUCCESS;
+					}
+				}
+				return msMessageContentNikePlusValidateSuccess;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageTitleNikePlus</b>.
+		/// </summary>
+		const string MESSAGE_TITLE_NIKE_PLUS = "nike+";
+		/// <summary>
+		/// Inner member for property <see cref="MessageTitleNikePlus"/>.
+		/// </summary>
+		static string msMessageTitleNikePlus;
+		/// <summary>
+		/// Gets string value for resource <b>MessageTitleNikePlus</b> (<i>"nike+"</i>).
+		/// </summary>
+		public static string MessageTitleNikePlus
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageTitleNikePlus))
+				{
+					msMessageTitleNikePlus = moResourceLoader.GetString("MessageTitleNikePlus");
+					if (string.IsNullOrEmpty(msMessageTitleNikePlus))
+					{
+						msMessageTitleNikePlus = MESSAGE_TITLE_NIKE_PLUS;
+					}
+				}
+				return msMessageTitleNikePlus;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>AppBarButtonSyncNikePlus.Label</b>.
+		/// </summary>
+		const string APP_BAR_BUTTON_SYNC_NIKE_PLUS_LABEL = "sync nike+";
+		/// <summary>
+		/// Inner member for property <see cref="AppBarButtonSyncNikePlusLabel"/>.
+		/// </summary>
+		static string msAppBarButtonSyncNikePlusLabel;
+		/// <summary>
+		/// Gets string value for resource <b>AppBarButtonSyncNikePlus.Label</b> (<i>"sync nike+"</i>).
+		/// </summary>
+		public static string AppBarButtonSyncNikePlusLabel
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msAppBarButtonSyncNikePlusLabel))
+				{
+					msAppBarButtonSyncNikePlusLabel = moResourceLoader.GetString("AppBarButtonSyncNikePlus.Label");
+					if (string.IsNullOrEmpty(msAppBarButtonSyncNikePlusLabel))
+					{
+						msAppBarButtonSyncNikePlusLabel = APP_BAR_BUTTON_SYNC_NIKE_PLUS_LABEL;
+					}
+				}
+				return msAppBarButtonSyncNikePlusLabel;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentNikePlusSync</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_NIKE_PLUS_SYNC = "activity synchronized to nike+.";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentNikePlusSync"/>.
+		/// </summary>
+		static string msMessageContentNikePlusSync;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentNikePlusSync</b> (<i>"activity synchronized to nike+."</i>).
+		/// </summary>
+		public static string MessageContentNikePlusSync
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentNikePlusSync))
+				{
+					msMessageContentNikePlusSync = moResourceLoader.GetString("MessageContentNikePlusSync");
+					if (string.IsNullOrEmpty(msMessageContentNikePlusSync))
+					{
+						msMessageContentNikePlusSync = MESSAGE_CONTENT_NIKE_PLUS_SYNC;
+					}
+				}
+				return msMessageContentNikePlusSync;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentNikePlusSyncFail</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_NIKE_PLUS_SYNC_FAIL = "activity couldn't be synchronized to nike+. wait a moment and try again.";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentNikePlusSyncFail"/>.
+		/// </summary>
+		static string msMessageContentNikePlusSyncFail;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentNikePlusSyncFail</b> (<i>"activity couldn't be synchronized to nike+. wait a moment and try again."</i>).
+		/// </summary>
+		public static string MessageContentNikePlusSyncFail
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentNikePlusSyncFail))
+				{
+					msMessageContentNikePlusSyncFail = moResourceLoader.GetString("MessageContentNikePlusSyncFail");
+					if (string.IsNullOrEmpty(msMessageContentNikePlusSyncFail))
+					{
+						msMessageContentNikePlusSyncFail = MESSAGE_CONTENT_NIKE_PLUS_SYNC_FAIL;
+					}
+				}
+				return msMessageContentNikePlusSyncFail;
+			}
+		}
+				
+		/// <summary>
+		/// Key for resource string <b>MessageContentNikePlusSyncWithFuel</b>.
+		/// </summary>
+		const string MESSAGE_CONTENT_NIKE_PLUS_SYNC_WITH_FUEL = "activity synchronized to nike+. fuel gain: {0:N0}";
+		/// <summary>
+		/// Inner member for property <see cref="MessageContentNikePlusSyncWithFuel"/>.
+		/// </summary>
+		static string msMessageContentNikePlusSyncWithFuel;
+		/// <summary>
+		/// Gets string value for resource <b>MessageContentNikePlusSyncWithFuel</b> (<i>"activity synchronized to nike+. fuel gain: {0:N0}"</i>).
+		/// </summary>
+		public static string MessageContentNikePlusSyncWithFuel
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msMessageContentNikePlusSyncWithFuel))
+				{
+					msMessageContentNikePlusSyncWithFuel = moResourceLoader.GetString("MessageContentNikePlusSyncWithFuel");
+					if (string.IsNullOrEmpty(msMessageContentNikePlusSyncWithFuel))
+					{
+						msMessageContentNikePlusSyncWithFuel = MESSAGE_CONTENT_NIKE_PLUS_SYNC_WITH_FUEL;
+					}
+				}
+				return msMessageContentNikePlusSyncWithFuel;
 			}
 		}
 				

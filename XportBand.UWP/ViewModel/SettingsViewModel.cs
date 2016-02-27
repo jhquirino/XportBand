@@ -12,6 +12,7 @@ namespace XportBand.ViewModel
     using GalaSoft.MvvmLight.Views;
     using Model;
     using MSHealthAPI;
+    using NikePlusAPI;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -51,7 +52,7 @@ namespace XportBand.ViewModel
         /// </summary>
         private const string SERVICE_FACEBOOK = "Facebook";
 
-        #endregion
+        #endregion Constants
 
         #region Inner Members
 
@@ -69,6 +70,11 @@ namespace XportBand.ViewModel
         /// Microsoft Health service instance.
         /// </summary>
         private readonly IMSHealthClient moMSHealthClient;
+
+        /// <summary>
+        /// Nike+ service instance.
+        /// </summary>
+        private readonly INikePlusClient moNikePlusClient;
 
         /// <summary>
         /// Inner member for <see cref="MSHealthProfile"/> property.
@@ -96,6 +102,21 @@ namespace XportBand.ViewModel
         private DistanceUnit moSelectedDistanceUnit;
 
         /// <summary>
+        /// Inner member for <see cref="NikePlusUser"/> property.
+        /// </summary>
+        private string msNikePlusUser;
+
+        /// <summary>
+        /// Inner member for <see cref="NikePlusPassword"/> property.
+        /// </summary>
+        private string msNikePlusPassword;
+
+        /// <summary>
+        /// Inner member for <see cref="IsNikePlusRunning"/> property.
+        /// </summary>
+        private bool mbIsNikePlusRunning = false;
+
+        /// <summary>
         /// Inner member for <see cref="ShowSignIn"/> property.
         /// </summary>
         private bool mbShowSignIn = false;
@@ -115,7 +136,7 @@ namespace XportBand.ViewModel
         /// </summary>
         private string msRunningService;
 
-        #endregion
+        #endregion Inner Members
 
         #region Properties
 
@@ -187,6 +208,43 @@ namespace XportBand.ViewModel
         }
 
         /// <summary>
+        /// Gets or sets the Nike+ User (e-mail).
+        /// </summary>
+        public string NikePlusUser
+        {
+            get { return msNikePlusUser; }
+            set
+            {
+                Set<string>(() => NikePlusUser, ref msNikePlusUser, value);
+                ((RelayCommand)ValidateNikePlusCredentialCommand).RaiseCanExecuteChanged();
+                ((RelayCommand)ClearNikePlusCredentialCommand).RaiseCanExecuteChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the Nike+ Password.
+        /// </summary>
+        public string NikePlusPassword
+        {
+            get { return msNikePlusPassword; }
+            set
+            {
+                Set<string>(() => NikePlusPassword, ref msNikePlusPassword, value);
+                ((RelayCommand)ValidateNikePlusCredentialCommand).RaiseCanExecuteChanged();
+                ((RelayCommand)ClearNikePlusCredentialCommand).RaiseCanExecuteChanged();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Nike+ request is running.
+        /// </summary>
+        public bool IsNikePlusRunning
+        {
+            get { return mbIsNikePlusRunning; }
+            set { Set<bool>(() => IsNikePlusRunning, ref mbIsNikePlusRunning, value); }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether Sign-in WebView must be shown.
         /// </summary>
         public bool ShowSignIn
@@ -213,7 +271,7 @@ namespace XportBand.ViewModel
             set { Set<bool>(() => IsRunningRequest, ref mbIsRunningRequest, value); }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Commands
 
@@ -232,7 +290,17 @@ namespace XportBand.ViewModel
         /// </summary>
         public ICommand NavigationCompletedCommand { get; private set; }
 
-        #endregion
+        /// <summary>
+        /// Gets the command to execute: Validate Nike+ Credentials.
+        /// </summary>
+        public ICommand ValidateNikePlusCredentialCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the command to execute: Clear Nike+ Credentials.
+        /// </summary>
+        public ICommand ClearNikePlusCredentialCommand { get; private set; }
+
+        #endregion Commands
 
         #region Constructors
 
@@ -242,16 +310,22 @@ namespace XportBand.ViewModel
         /// <param name="dialogService">Dialog service instance.</param>
         /// <param name="navigationService">Navigation service instance.</param>
         /// <param name="msHealthClient">Microsoft Health service instance.</param>
-        public SettingsViewModel(IDialogService dialogService, INavigationService navigationService, IMSHealthClient msHealthClient)
+        /// <param name="nikePlusClient">Nike+ service instance.</param>
+        public SettingsViewModel(IDialogService dialogService, INavigationService navigationService, IMSHealthClient msHealthClient, INikePlusClient nikePlusClient)
         {
             // Initialize services
             moDialogService = dialogService;
             moNavigationService = navigationService;
             moMSHealthClient = msHealthClient;
+            moNikePlusClient = nikePlusClient;
             // Initialize commands
             SignInMSHealthCommand = new RelayCommand(SignInMSHealth, () => true);
             SignOutMSHealthCommand = new RelayCommand(SignOutMSHealth, () => true);
             NavigationCompletedCommand = new RelayCommand<object>(NavigationCompleted, (args) => true);
+            ValidateNikePlusCredentialCommand = new RelayCommand(ValidateNikePlusCredential,
+                () => !string.IsNullOrEmpty(NikePlusUser) && !string.IsNullOrEmpty(NikePlusPassword));
+            ClearNikePlusCredentialCommand = new RelayCommand(ClearNikePlusCredential,
+                () => !string.IsNullOrEmpty(NikePlusUser) && !string.IsNullOrEmpty(NikePlusPassword));
             // Get AppVersion
             Package loPackage = Package.Current;
             PackageId loPackageId = loPackage.Id;
@@ -277,7 +351,8 @@ namespace XportBand.ViewModel
                 }
             };
         }
-        #endregion
+
+        #endregion Constructors
 
         #region Methods
 
@@ -329,24 +404,27 @@ namespace XportBand.ViewModel
                             {
                                 case MSHealthNavigationResult.None:
                                     break;
+
                                 case MSHealthNavigationResult.SignIn:
                                     // Signed-in, so, read profile and update values/settings
                                     MSHealthProfile = await moMSHealthClient.ReadProfile();
                                     IsMSHealthSignedIn = moMSHealthClient.IsSignedIn;
-                                    Settings.UpdateMSHealthToken(moMSHealthClient.Token);
+                                    Settings.MSHealthToken = moMSHealthClient.Token;
                                     ShowSignIn = false;
                                     IsRunningRequest = false;
                                     IsMSHealthRunning = false;
                                     break;
+
                                 case MSHealthNavigationResult.SignOut:
                                     // Signed-out, so, reset values/settings
                                     MSHealthProfile = null;
                                     IsMSHealthSignedIn = false;
-                                    Settings.UpdateMSHealthToken(null);
+                                    Settings.MSHealthToken = null;
                                     ShowSignIn = false;
                                     IsRunningRequest = false;
                                     IsMSHealthRunning = false;
                                     break;
+
                                 default:
                                     // Must not happen, so, reset values
                                     MSHealthProfile = null;
@@ -357,12 +435,16 @@ namespace XportBand.ViewModel
                                     break;
                             }
                             break;
+
                         case SERVICE_RUNKEEPER:
                             break;
+
                         case SERVICE_NIKEPLUS:
                             break;
+
                         case SERVICE_FACEBOOK:
                             break;
+
                         default:
                             break;
                     }
@@ -380,17 +462,21 @@ namespace XportBand.ViewModel
                     switch (msRunningService)
                     {
                         case SERVICE_MSHEALTH:
-                            // Reset Microsoft Health values 
+                            // Reset Microsoft Health values
                             MSHealthProfile = null;
                             IsMSHealthSignedIn = false;
                             IsMSHealthRunning = false;
                             break;
+
                         case SERVICE_RUNKEEPER:
                             break;
+
                         case SERVICE_NIKEPLUS:
                             break;
+
                         case SERVICE_FACEBOOK:
                             break;
+
                         default:
                             break;
                     }
@@ -407,7 +493,89 @@ namespace XportBand.ViewModel
             }
         }
 
-        #endregion
+        /// <summary>
+        /// Validates Nike+ credentials (sign-in test).
+        /// </summary>
+        private async void ValidateNikePlusCredential()
+        {
+            if (!string.IsNullOrEmpty(NikePlusUser) &&
+                !string.IsNullOrEmpty(NikePlusPassword))
+            {
+                IsRunningRequest = true;
+                IsNikePlusRunning = true;
+                msRunningService = SERVICE_NIKEPLUS;
+                // Check pattern
+                if (System.Text.RegularExpressions.Regex.IsMatch(NikePlusPassword, "[\"&`'<>]"))
+                {
+                    await moDialogService.ShowMessage(Resources.Strings.MessageContentNikePlusPasswordPattern,
+                                                      Resources.Strings.MessageTitleNikePlus,
+                                                      Resources.Strings.MessageButtonOK,
+                                                      Resources.Strings.MessageButtonMoreDetails,
+                                                      async (result) =>
+                                                      {
+                                                          if (!result)
+                                                              await Windows.System.Launcher.LaunchUriAsync(new Uri(NikePlusClient.URL_PASSWORD_PATTERN));
+                                                      });
+                }
+                else
+                {
+#if WINDOWS_UWP
+                    // Persist Nike+ Credentials
+                    Settings.NikePlusCredential = new Windows.Security.Credentials.PasswordCredential()
+                    {
+                        UserName = NikePlusUser,
+                        Password = NikePlusPassword,
+                    };
+#endif
+                    try
+                    {
+                        // Test sign-in
+                        moNikePlusClient.SetCredentials(NikePlusUser, NikePlusPassword);
+                        if (await moNikePlusClient.SignIn())
+                        {
+                            await moDialogService.ShowMessage(Resources.Strings.MessageContentNikePlusValidateSuccess,
+                                                              Resources.Strings.MessageTitleNikePlus,
+                                                              Resources.Strings.MessageButtonOK,
+                                                              null);
+                        }
+                        else
+                        {
+                            await moDialogService.ShowMessage(Resources.Strings.MessageContentNikePlusValidateFail,
+                                                              Resources.Strings.MessageTitleNikePlus,
+                                                              Resources.Strings.MessageButtonOK,
+                                                              null);
+                        }
+                    }
+                    catch //(Exception)
+                    {
+                        await moDialogService.ShowMessage(Resources.Strings.MessageContentNikePlusValidateFail,
+                                                          Resources.Strings.MessageTitleNikePlus,
+                                                          Resources.Strings.MessageButtonOK,
+                                                          null);
+                    }
+                }
+            }
+            else
+            {
+
+            }
+            IsRunningRequest = false;
+            IsNikePlusRunning = false;
+            msRunningService = null;
+
+        }
+
+        /// <summary>
+        /// Clears persisted Nike+ credentials.
+        /// </summary>
+        private void ClearNikePlusCredential()
+        {
+            NikePlusUser = string.Empty;
+            NikePlusPassword = string.Empty;
+            Settings.NikePlusCredential = null;
+        }
+
+        #endregion Methods
 
         #region INavigable implementation
 
@@ -428,25 +596,19 @@ namespace XportBand.ViewModel
                                              select loUnit).FirstOrDefault();
             }
             // Check Microsoft Health refresh token
-            if (!string.IsNullOrEmpty(Settings.MSHealthRefreshToken))
+            if (Settings.MSHealthToken != null &&
+                !string.IsNullOrEmpty(Settings.MSHealthToken.RefreshToken))
             {
                 try
                 {
                     // Microsoft Health refresh token is available, so, check validity
                     IsRunningRequest = true;
                     IsMSHealthRunning = true;
-                    MSHealthToken loSettingsToken = new MSHealthToken()
-                    {
-                        AccessToken = Settings.MSHealthAccessToken,
-                        RefreshToken = Settings.MSHealthRefreshToken,
-                        ExpiresIn = Settings.MSHealthExpiresIn,
-                        CreationTime = new DateTime(Settings.MSHealthTokenCreationTime),
-                    };
-                    if (await moMSHealthClient.ValidateToken(loSettingsToken))
+                    if (await moMSHealthClient.ValidateToken(Settings.MSHealthToken))
                     {
                         // Microsoft Health refresh token is valid, so, read profile
                         MSHealthProfile = await moMSHealthClient.ReadProfile();
-                        Settings.UpdateMSHealthToken(moMSHealthClient.Token);
+                        Settings.MSHealthToken = moMSHealthClient.Token;
                         IsMSHealthSignedIn = true;
                     }
                     else
@@ -465,6 +627,12 @@ namespace XportBand.ViewModel
                 IsMSHealthSignedIn = false;
                 MSHealthProfile = null;
             }
+            // Nike+ Credential
+            if (Settings.NikePlusCredential != null)
+            {
+                NikePlusUser = Settings.NikePlusCredential.UserName;
+                NikePlusPassword = Settings.NikePlusCredential.Password;
+            }
         }
 
         /// <summary>
@@ -473,10 +641,26 @@ namespace XportBand.ViewModel
         /// <param name="parameter"><see cref="Windows.UI.Xaml.Navigation.NavigationEventArgs.Parameter" />.</param>
         public void Deactivate(object parameter)
         {
-            // No implementation necessary
+            // Persist Nike+ Credentials
+            if (!string.IsNullOrEmpty(NikePlusUser) &&
+                !string.IsNullOrEmpty(NikePlusPassword))
+            {
+                // Check pattern
+                if (!System.Text.RegularExpressions.Regex.IsMatch(NikePlusPassword, "[\"&`'<>]"))
+                {
+#if WINDOWS_UWP
+                    Settings.NikePlusCredential = new Windows.Security.Credentials.PasswordCredential()
+                    {
+                        UserName = NikePlusUser,
+                        Password = NikePlusPassword,
+                    };
+#endif
+                    moNikePlusClient.SetCredentials(NikePlusUser, NikePlusPassword);
+                }
+            }
         }
 
-        #endregion
+        #endregion INavigable implementation
 
     }
 

@@ -347,7 +347,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "totalDistance",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? TotalDistance { get; set; }
+        public double? TotalDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the total distance covered on foot during the period.
@@ -355,7 +355,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "totalDistanceOnFoot",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? TotalDistanceOnFoot { get; set; }
+        public double? TotalDistanceOnFoot { get; set; }
 
         /// <summary>
         /// Gets or sets the absolute distance including any paused time distance during the period.
@@ -363,7 +363,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "actualDistance",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? ActualDistance { get; set; }
+        public double? ActualDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the cumulative elevation gain accrued during the period in cm.
@@ -371,7 +371,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "elevationGain",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? ElevationGain { get; set; }
+        public double? ElevationGain { get; set; }
 
         /// <summary>
         /// Gets or sets the cumulative elevation loss accrued during this period in cm.
@@ -379,7 +379,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "elevationLoss",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? ElevationLoss { get; set; }
+        public double? ElevationLoss { get; set; }
 
         /// <summary>
         /// Gets or sets the maximum elevation during this period in cm.
@@ -387,7 +387,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "maxElevation",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? MaxElevation { get; set; }
+        public double? MaxElevation { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum elevation during this period in cm.
@@ -395,7 +395,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "minElevation",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? MinElevation { get; set; }
+        public double? MinElevation { get; set; }
 
         /// <summary>
         /// Gets or sets the distance in cm between recorded GPS points.
@@ -403,7 +403,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "waypointDistance",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? WaypointDistance { get; set; }
+        public double? WaypointDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the average speed during the period.
@@ -411,7 +411,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "speed",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? Speed { get; set; }
+        public double? Speed { get; set; }
 
         /// <summary>
         /// Gets or sets the average pace during the period.
@@ -419,7 +419,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "pace",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? Pace { get; set; }
+        public double? Pace { get; set; }
 
         /// <summary>
         /// Gets or sets the total distance to the end of this period divided by total time to the end of this period.
@@ -427,7 +427,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "overallPace",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? OverallPace { get; set; }
+        public double? OverallPace { get; set; }
 
         #endregion
 

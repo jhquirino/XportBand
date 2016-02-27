@@ -17,9 +17,11 @@ namespace XportBand.ViewModel
     using System.Linq;
     using System.Text;
     using System.Windows.Input;
+#if WINDOWS_UWP
     using Windows.Storage;
     using Windows.Storage.Pickers;
     using Windows.UI.Core;
+#endif    
 
     /// <summary>
     /// ViewModel for Main view.
@@ -330,8 +332,10 @@ namespace XportBand.ViewModel
                                             FilterActivityGolf | FilterActivitySleep | FilterActivityGuided;
                 if (!lbFilterActivityType)
                 {
+#if WINDOWS_UWP
                     await moDialogService.ShowMessage(Resources.Strings.MessageContentSelectActivityType,
                                                       Resources.Strings.MessageTitleFilterActivities);
+#endif
                     return;
                 }
                 // Determine Activity Types to filter
@@ -382,7 +386,7 @@ namespace XportBand.ViewModel
                                                                                         endTime: ldtEnd,
                                                                                         type: loActivityType,
                                                                                         splitDistanceType: loDistance);
-                Settings.UpdateMSHealthToken(moMSHealthClient.Token);
+                Settings.MSHealthToken = moMSHealthClient.Token;
                 // Parse each separated activity list into one single activity list
                 List<MSHealthActivity> loActivitiesList = new List<MSHealthActivity>();
                 if (loActivities.BikeActivities != null &&
@@ -416,10 +420,12 @@ namespace XportBand.ViewModel
                     System.Diagnostics.Debugger.Break();
                 } // Handle exceptions (just for debugging purposes)
                   // Show error message
+#if WINDOWS_UWP
                 await moDialogService.ShowError(Resources.Strings.MessageContentErrorOperation,
                                                 Resources.Strings.MessageTitleError,
                                                 Resources.Strings.MessageButtonOK,
                                                 null);
+#endif
             }
             finally
             {
@@ -460,7 +466,9 @@ namespace XportBand.ViewModel
                      * Prepare file contents
                      */
                     // Header
+#if WINDOWS_UWP
                     loStrBuilder.AppendLine(Resources.Strings.FileCSVActivitiesHeader);
+#endif
                     // Export Content
                     foreach (MSHealthActivity loActivity in Activities)
                     {
@@ -562,6 +570,7 @@ namespace XportBand.ViewModel
                     /*
                      * Pick file name to save, and write content
                      */
+#if WINDOWS_UWP
                     FileSavePicker loFileSavePicker = new FileSavePicker();
                     //loFileSavePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
                     loFileSavePicker.FileTypeChoices.Add("CSV", new List<string>() { ".csv" });
@@ -585,6 +594,7 @@ namespace XportBand.ViewModel
                                                             null);
                         }
                     }
+#endif
                 }
                 catch (Exception loException)
                 {
@@ -594,10 +604,12 @@ namespace XportBand.ViewModel
                         System.Diagnostics.Debug.WriteLine(loException.StackTrace);
                         System.Diagnostics.Debugger.Break();
                     } // Handle exceptions (just for debugging purposes)
+#if WINDOWS_UWP
                     await moDialogService.ShowError(Resources.Strings.MessageContentErrorOperation,
                                                     Resources.Strings.MessageTitleExportCSV,
                                                     Resources.Strings.MessageButtonOK,
                                                     null);
+#endif
                 }
                 finally
                 {
@@ -617,26 +629,22 @@ namespace XportBand.ViewModel
         public async void Activate(object parameter)
         {
             // Set back button invisible (for Windows app)
+#if WINDOWS_UWP
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+#endif
             // Check Microsoft Health refresh token
-            if (!string.IsNullOrEmpty(Settings.MSHealthRefreshToken) &&
+            if (Settings.MSHealthToken != null &&
+                !string.IsNullOrEmpty(Settings.MSHealthToken.RefreshToken) &&
                 !IsMSHealthSignedIn)
             {
                 try
                 {
                     IsRunningRequest = true;
                     // Microsoft Health refresh token is available, so, check validity
-                    MSHealthToken loSettingsToken = new MSHealthToken()
-                    {
-                        AccessToken = Settings.MSHealthAccessToken,
-                        RefreshToken = Settings.MSHealthRefreshToken,
-                        ExpiresIn = Settings.MSHealthExpiresIn,
-                        CreationTime = new DateTime(Settings.MSHealthTokenCreationTime),
-                    };
-                    if (await moMSHealthClient.ValidateToken(loSettingsToken))
+                    if (await moMSHealthClient.ValidateToken(Settings.MSHealthToken))
                     {
                         // Microsoft Health refresh token is valid, persist and set as signed-int
-                        Settings.UpdateMSHealthToken(moMSHealthClient.Token);
+                        Settings.MSHealthToken = moMSHealthClient.Token;
                         IsMSHealthSignedIn = true;
                     }
                     else
@@ -650,7 +658,8 @@ namespace XportBand.ViewModel
             }
             else
             {
-                if (string.IsNullOrEmpty(Settings.MSHealthRefreshToken))
+                if (Settings.MSHealthToken == null ||
+                    string.IsNullOrEmpty(Settings.MSHealthToken.RefreshToken))
                 {
                     // Microsoft Health refresh token is not available, so, set as signed-out
                     IsMSHealthSignedIn = false;

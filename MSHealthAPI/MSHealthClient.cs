@@ -15,9 +15,15 @@ namespace MSHealthAPI
     using System.Net;
     using System.Text;
     using System.Threading.Tasks;
+#if WINDOWS_UWP
     using Windows.Data.Json;
     using Windows.Foundation;
     using Windows.UI.Xaml.Controls;
+#elif DESKTOP_APP
+	using System.Collections.Specialized;
+	using System.Web;
+	using System.Windows.Navigation;
+#endif
 
     #region IMSHealthClient interface
 
@@ -35,7 +41,7 @@ namespace MSHealthAPI
         bool IsSignedIn { get; }
 
         /// <summary>
-        /// Gets <see cref="MSHealthAPI.MSHealthToken"/> instance 
+        /// Gets <see cref="MSHealthAPI.MSHealthToken"/> instance
         /// </summary>
         MSHealthToken Token { get; }
 
@@ -55,12 +61,20 @@ namespace MSHealthAPI
 
 #if WINDOWS_UWP
         /// <summary>
-        /// Handles <see cref="WebView.NavigationCompleted"/> event, to determine if Sign-in/Sign-out 
+        /// Handles <see cref="WebView.NavigationCompleted"/> event, to determine if Sign-in/Sign-out
         /// process was successfull.
         /// </summary>
         /// <param name="args">The event data</param>
         /// <returns><see cref="NavigationResult"/> of Sign-in/Sign-out process.</returns>
         Task<MSHealthNavigationResult> HandleNavigationCompleted(WebViewNavigationCompletedEventArgs args);
+#elif DESKTOP_APP
+		/// <summary>
+		/// Handles <see cref="System.Windows.Controls.WebBrowser.Navigated"/> event, to determine if Sign-in/Sign-out
+		/// process was successfull.
+		/// </summary>
+		/// <param name="args">The event data</param>
+		/// <returns><see cref="MSHealthNavigationResult"/> of Sign-in/Sign-out process.</returns>
+		Task<MSHealthNavigationResult> HandleNavigationCompleted(NavigationEventArgs args);
 #endif
 
         /// <summary>
@@ -142,21 +156,21 @@ namespace MSHealthAPI
         /// </summary>
         /// <returns><see langword="true"/> if refresh successfull, otherwise, <see langword="false"/>.</returns>
         /// <remarks>
-        /// It only works if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it, 
+        /// It only works if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it,
         /// it's necessary to set use <see cref="MSHealthScope.OfflineAccess"/>.
         /// </remarks>
         Task<bool> RefreshToken();
 
         /// <summary>
-        /// Verifies <paramref name="token"/>instance validity (<see cref="MSHealthToken.ExpirationTime"/>), 
-        /// replaces current <see cref="MSHealthClient.Token"/> and if <paramref name="refreshIfInvalid"/> 
+        /// Verifies <paramref name="token"/>instance validity (<see cref="MSHealthToken.ExpirationTime"/>),
+        /// replaces current <see cref="MSHealthClient.Token"/> and if <paramref name="refreshIfInvalid"/>
         /// is <see langword="true"/>, calls <see cref="MSHealthClient.RefreshToken"/>.
         /// </summary>
         /// <param name="token">Instance of <see cref="MSHealthToken"/> to validate.</param>
         /// <param name="refreshIfInvalid">Flag to enforce Token refresh if is not valid.</param>
         /// <returns><see langword="true"/> if specified token is valid or has been refresh successfull, otherwise, <see langword="false"/>.</returns>
         /// <remarks>
-        /// It only works if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it, 
+        /// It only works if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it,
         /// it's necessary to set use <see cref="MSHealthScope.OfflineAccess"/>.
         /// </remarks>
         Task<bool> ValidateToken(MSHealthToken token, bool refreshIfInvalid = true);
@@ -276,12 +290,12 @@ namespace MSHealthAPI
         /// </summary>
         private readonly string msClientId;
 
-        // <summary>
+        /// <summary>
         /// The Client Secret for registerd app.
         /// </summary>
         private readonly string msClientSecret;
 
-        // <summary>
+        /// <summary>
         /// The "list" of authorization scopes that app requires.
         /// </summary>
         private readonly MSHealthScope moScope;
@@ -296,7 +310,7 @@ namespace MSHealthAPI
         public bool IsSignedIn { get; private set; }
 
         /// <summary>
-        /// Gets <see cref="MSHealthAPI.MSHealthToken"/> instance 
+        /// Gets <see cref="MSHealthAPI.MSHealthToken"/> instance
         /// </summary>
         public MSHealthToken Token { get; private set; }
 
@@ -377,11 +391,11 @@ namespace MSHealthAPI
 
 #if WINDOWS_UWP
         /// <summary>
-        /// Handles <see cref="WebView.NavigationCompleted"/> event, to determine if Sign-in/Sign-out 
+        /// Handles <see cref="WebView.NavigationCompleted"/> event, to determine if Sign-in/Sign-out
         /// process was successfull.
         /// </summary>
         /// <param name="args">The event data</param>
-        /// <returns><see cref="NavigationResult"/> of Sign-in/Sign-out process.</returns>
+        /// <returns><see cref="MSHealthNavigationResult"/> of Sign-in/Sign-out process.</returns>
         public async Task<MSHealthNavigationResult> HandleNavigationCompleted(WebViewNavigationCompletedEventArgs args)
         {
             MSHealthNavigationResult loResult = MSHealthNavigationResult.None;
@@ -427,6 +441,59 @@ namespace MSHealthAPI
             }
             return loResult;
         }
+#elif DESKTOP_APP
+		/// <summary>
+		/// Handles <see cref="System.Windows.Controls.WebBrowser.Navigated"/> event, to determine if Sign-in/Sign-out
+		/// process was successfull.
+		/// </summary>
+		/// <param name="args">The event data</param>
+		/// <returns><see cref="MSHealthNavigationResult"/> of Sign-in/Sign-out process.</returns>
+		public async Task<MSHealthNavigationResult> HandleNavigationCompleted(NavigationEventArgs args)
+		{
+			MSHealthNavigationResult loResult = MSHealthNavigationResult.None;
+			// Check if URL has Authentication path
+			if (args.Uri.LocalPath.StartsWith(AUTH_PATH, StringComparison.OrdinalIgnoreCase))
+			{
+				//HttpUtility
+				NameValueCollection loDecoder = HttpUtility.ParseQueryString(args.Uri.Query);
+				// Read Authentication Code
+				string lsCode = loDecoder["code"];
+				// Read Authentication Errors
+				string lsError = loDecoder["error"];
+				string lsErrorDesc = loDecoder["error_description"];
+				// Check the code to see if this is sign-in or sign-out
+				if (!string.IsNullOrEmpty(lsCode))
+				{
+					// Check error and throw Exception
+					if (!string.IsNullOrEmpty(lsError))
+						throw new Exception(string.Format("{0}\r\n{1}", lsError, lsErrorDesc));
+					// Get Token
+					try
+					{
+						// Signed-in
+						Token = await GetToken(lsCode, false);
+						IsSignedIn = true;
+						loResult = MSHealthNavigationResult.SignIn;
+					}
+					catch
+					{
+						// Error
+						Token = null;
+						IsSignedIn = false;
+						loResult = MSHealthNavigationResult.Error;
+						throw;
+					}
+				}
+				else
+				{
+					// Signed-out
+					Token = null;
+					IsSignedIn = false;
+					loResult = MSHealthNavigationResult.SignOut;
+				}
+			}
+			return loResult;
+		}
 #endif
 
         /// <summary>
@@ -447,15 +514,15 @@ namespace MSHealthAPI
         }
 
         /// <summary>
-        /// Verifies <paramref name="token"/>instance validity (<see cref="MSHealthToken.ExpirationTime"/>), 
-        /// replaces current <see cref="MSHealthClient.Token"/> and if <paramref name="refreshIfInvalid"/> 
+        /// Verifies <paramref name="token"/>instance validity (<see cref="MSHealthToken.ExpirationTime"/>),
+        /// replaces current <see cref="MSHealthClient.Token"/> and if <paramref name="refreshIfInvalid"/>
         /// is <see langword="true"/>, calls <see cref="MSHealthClient.RefreshToken"/>.
         /// </summary>
         /// <param name="token">Instance of <see cref="MSHealthToken"/> to validate.</param>
         /// <param name="refreshIfInvalid">Flag to enforce Token refresh if is not valid.</param>
         /// <returns><see langword="true"/> if specified token is valid or has been refresh successfull, otherwise, <see langword="false"/>.</returns>
         /// <remarks>
-        /// It only wworks if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it, 
+        /// It only wworks if <see cref="MSHealthToken.RefreshToken"/> is available, to obtain it,
         /// it's necessary to set use <see cref="MSHealthScope.OfflineAccess"/>.
         /// </remarks>
         public async Task<bool> ValidateToken(MSHealthToken token, bool refreshIfInvalid = true)
@@ -816,6 +883,8 @@ namespace MSHealthAPI
                         using (StreamReader loStreamReader = new StreamReader(loResponseStream))
                         {
                             string lsResponse = loStreamReader.ReadToEnd();
+#if DESKTOP_APP
+#elif WINDOWS_UWP
                             JsonObject loJsonResponse = JsonObject.Parse(lsResponse);
                             IJsonValue loJsonValue = null;
                             string lsError = null;
@@ -824,6 +893,7 @@ namespace MSHealthAPI
                                 lsError = loJsonValue.GetString();
                             if (!string.IsNullOrEmpty(lsError))
                                 throw new Exception(lsError);
+#endif
                             // Deserialize Json response
                             loToken = JsonConvert.DeserializeObject<MSHealthToken>(lsResponse);
                             if (string.IsNullOrEmpty(loToken.RefreshToken))
@@ -834,7 +904,7 @@ namespace MSHealthAPI
             }
             catch (Exception loException)
             {
-                throw new MSHealthRequestException(loException.Message, loException, loUri.Path, loUri.Query);
+                throw new MSHealthException(loException.Message, loException, loUri.Path, loUri.Query);
             }
 
             return loToken;
@@ -882,7 +952,7 @@ namespace MSHealthAPI
             }
             catch (Exception loException)
             {
-                throw new MSHealthRequestException(loException.Message, loException, path, query);
+                throw new MSHealthException(loException.Message, loException, path, query);
             }
 
             return lsResponse;
@@ -920,13 +990,13 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "token_type",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public string TokenType { get; set; } = TOKEN_TYPE;
+        public string TokenType { get; set; } //= TOKEN_TYPE;
 
         /// <summary>
-        /// The amount of time in seconds when the access token is valid. 
+        /// The amount of time in seconds when the access token is valid.
         /// </summary>
         /// <remarks>
-        /// You can request a new access token by using the refresh token (if available), 
+        /// You can request a new access token by using the refresh token (if available),
         /// or by repeating the authentication request from the beginning.
         /// </remarks>
         [JsonProperty(PropertyName = "expires_in",
@@ -935,7 +1005,7 @@ namespace MSHealthAPI
         public long ExpiresIn { get; set; }
 
         /// <summary>
-        /// A space-separated list of scopes that your app requires. 
+        /// A space-separated list of scopes that your app requires.
         /// </summary>
         [JsonProperty(PropertyName = "scope",
                       NullValueHandling = NullValueHandling.Ignore,
@@ -962,19 +1032,32 @@ namespace MSHealthAPI
         /// Time when current access token was created.
         /// </summary>
         [JsonIgnore]
-        public DateTime CreationTime { get; set; } = DateTime.Now;
+        public DateTime CreationTime { get; set; } //= DateTime.Now;
 
         /// <summary>
         /// Expected Time when current access token expires.
         /// </summary>
         /// <remarks>
-        /// This value is calculated using <see cref="CreationTime"/> and 
+        /// This value is calculated using <see cref="CreationTime"/> and
         /// <see cref="ExpiresIn"/> values.
         /// </remarks>
         [JsonIgnore]
         public DateTime ExpirationTime
         {
             get { return CreationTime.AddSeconds(ExpiresIn); }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="MSHealthToken"/> class.
+        /// </summary>
+        public MSHealthToken()
+        {
+            TokenType = TOKEN_TYPE;
+            CreationTime = DateTime.Now;
         }
 
         #endregion
@@ -1006,72 +1089,72 @@ namespace MSHealthAPI
         /// Gets or sets the user's middle name.
         /// </summary>
         [JsonProperty(PropertyName = "middleName",
-                     NullValueHandling = NullValueHandling.Ignore,
-                     Required = Required.Default)]
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
         public string MiddleName { get; set; }
 
         /// <summary>
         /// Gets or sets the user's last name.
         /// </summary>
         [JsonProperty(PropertyName = "lastName",
-                     NullValueHandling = NullValueHandling.Ignore,
-                     Required = Required.Default)]
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
         public string LastName { get; set; }
 
         /// <summary>
         /// Gets or sets the last update time of the user's profile record.
         /// </summary>
         [JsonProperty(PropertyName = "lastUpdateTime",
-                     NullValueHandling = NullValueHandling.Ignore,
-                     Required = Required.Default)]
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
         public DateTime LastUpdateTime { get; set; }
 
         /// <summary>
         /// Gets or sets the user's birth date.
         /// </summary>
         [JsonProperty(PropertyName = "birthdate",
-                     NullValueHandling = NullValueHandling.Ignore,
-                     Required = Required.Default)]
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
         public DateTime Birthdate { get; set; }
 
         /// <summary>
         /// Gets or sets the user's postal code.
         /// </summary>
         [JsonProperty(PropertyName = "postalCode",
-                     NullValueHandling = NullValueHandling.Ignore,
-                     Required = Required.Default)]
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
         public string PostalCode { get; set; }
 
         /// <summary>
         /// Gets or sets the user's gender.
         /// </summary>
         [JsonProperty(PropertyName = "gender",
-                     NullValueHandling = NullValueHandling.Ignore,
-                     Required = Required.Default)]
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
         public string Gender { get; set; }
 
         /// <summary>
         /// Gets or sets the user's current height.
         /// </summary>
         [JsonProperty(PropertyName = "height",
-                     NullValueHandling = NullValueHandling.Ignore,
-                     Required = Required.Default)]
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
         public int Height { get; set; }
 
         /// <summary>
         /// Gets or sets the user's current weight.
         /// </summary>
         [JsonProperty(PropertyName = "weight",
-                     NullValueHandling = NullValueHandling.Ignore,
-                     Required = Required.Default)]
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
         public int Weight { get; set; }
 
         /// <summary>
         /// Gets or sets the user's preferred locale.
         /// </summary>
         [JsonProperty(PropertyName = "preferredLocale",
-                     NullValueHandling = NullValueHandling.Ignore,
-                     Required = Required.Default)]
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
         public string PreferredLocale { get; set; }
 
         #endregion
@@ -1086,7 +1169,7 @@ namespace MSHealthAPI
     /// Represents error that occur during <see cref="MSHealthClient"/> operations execution.
     /// </summary>
     /// <seealso cref="System.Exception" />
-    public sealed class MSHealthRequestException : Exception
+    public sealed class MSHealthException : Exception
     {
 
         #region Properties
@@ -1094,12 +1177,12 @@ namespace MSHealthAPI
         /// <summary>
         /// Gets the error response for request.
         /// </summary>
-        public MSHealthErrorResponse ErrorResponse { get; private set; }
+        public MSHealthError Error { get; private set; }
 
         /// <summary>
-        /// Gets the error <see cref="WebResponse"/> for request.
+        /// Gets the error <see cref="HttpWebResponse"/> for request.
         /// </summary>
-        public WebResponse ErrorWebResponse { get; private set; }
+        public HttpWebResponse HttpWebResponse { get; private set; }
 
         /// <summary>
         /// Gets the path for the request that raises the error.
@@ -1116,13 +1199,13 @@ namespace MSHealthAPI
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MSHealthRequestException"/> class.
+        /// Initializes a new instance of the <see cref="MSHealthException"/> class.
         /// </summary>
         /// <param name="message"><see cref="Exception.Message"/>.</param>
         /// <param name="innerException"><see cref="Exception.InnerException"/>.</param>
         /// <param name="path">Path for the request that raises the error.</param>
         /// <param name="query">Query for the request that raises the error.</param>
-        public MSHealthRequestException(string message, Exception innerException, string path, string query) :
+        public MSHealthException(string message, Exception innerException, string path, string query) :
             base(message, innerException)
         {
             Path = path;
@@ -1132,9 +1215,13 @@ namespace MSHealthAPI
             if (loWebException != null)
             {
                 // Get WebResponse for inner Exception, and handle it
-                ErrorWebResponse = loWebException.Response;
                 if (loWebException.Response != null)
                 {
+                    HttpWebResponse = loWebException.Response as HttpWebResponse;
+                    if (HttpWebResponse != null &&
+                        System.Diagnostics.Debugger.IsAttached)
+                        System.Diagnostics.Debug.WriteLine("Exception StatusCode: {0}", HttpWebResponse.StatusCode);
+                    // Get response details
                     using (Stream loResponseStream = loWebException.Response.GetResponseStream())
                     {
                         using (StreamReader loStreamReader = new StreamReader(loResponseStream))
@@ -1143,20 +1230,15 @@ namespace MSHealthAPI
                             string lsErrorResponse = loStreamReader.ReadToEnd();
                             if (!string.IsNullOrEmpty(lsErrorResponse))
                             {
-                                try
+                                // Deserialize response (Json)
+                                JsonSerializerSettings loSerializerSettings = new JsonSerializerSettings();
+                                loSerializerSettings.Error = (sender, args) =>
                                 {
-                                    // Deserialize response (Json)
-                                    ErrorResponse = JsonConvert.DeserializeObject<MSHealthErrorResponse>(lsErrorResponse);
-                                }
-                                catch (Exception loException)
-                                {
-                                    // Handle response deserialization exception (just for debugging purposes). TODO: Delete this code
                                     if (System.Diagnostics.Debugger.IsAttached)
-                                    {
-                                        System.Diagnostics.Debug.WriteLine(loException.StackTrace);
-                                        System.Diagnostics.Debugger.Break();
-                                    }
-                                }
+                                        System.Diagnostics.Debug.WriteLine(args.ErrorContext.Error.Message);
+                                    args.ErrorContext.Handled = true;
+                                };
+                                Error = JsonConvert.DeserializeObject<MSHealthError>(lsErrorResponse, loSerializerSettings);
                             }
                         }
                     }
@@ -1170,13 +1252,13 @@ namespace MSHealthAPI
 
     #endregion
 
-    #region MSHealthErrorResponse class
+    #region MSHealthError class
 
     /// <summary>
     /// Represents error reponse to Microsoft Health Cloud API requests.
     /// </summary>
     [JsonObject]
-    public sealed class MSHealthErrorResponse
+    public sealed class MSHealthError
     {
 
         #region Properties
@@ -1269,7 +1351,7 @@ namespace MSHealthAPI
         /// Access to profile data.
         /// </summary>
         /// <remarks>
-        /// Profile includes things like name, gender, weight, and age. 
+        /// Profile includes things like name, gender, weight, and age.
         /// Email address will not be shared.
         /// </remarks>
         ReadProfile = 1,
@@ -1281,7 +1363,7 @@ namespace MSHealthAPI
         /// </remarks>
         ReadActivityHistory = 2,
         /// <summary>
-        /// Access information about the devices associated with used Microsoft Health account. 
+        /// Access information about the devices associated with used Microsoft Health account.
         /// </summary>
         ReadDevices = 4,
         /// <summary>

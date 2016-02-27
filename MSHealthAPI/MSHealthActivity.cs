@@ -106,6 +106,20 @@ namespace MSHealthAPI
     public sealed class MSHealthActivity
     {
 
+        #region Constants
+
+        /// <summary>
+        /// Split Distance value for Kilometers.
+        /// </summary>
+        public const double SPLIT_DISTANCE_KILOMETER = 100000;
+
+        /// <summary>
+        /// Split Distance value for Miles.
+        /// </summary>
+        public const double SPLIT_DISTANCE_MILE = 160934;
+
+        #endregion
+
         #region Properties
 
         /// <summary>
@@ -264,7 +278,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "splitDistance",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? SplitDistance { get; set; }
+        public double? SplitDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the map points for the activity.
@@ -534,7 +548,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "ordinal",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? Ordinal { get; set; }
+        public long? Ordinal { get; set; }
 
         /// <summary>
         /// Gets or sets the distance not including distance traveled while paused, 
@@ -544,7 +558,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "actualDistance",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? ActualDistance { get; set; }
+        public double? ActualDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the total distance from the start point to this map point.
@@ -552,7 +566,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "totalDistance",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? TotalDistance { get; set; }
+        public double? TotalDistance { get; set; }
 
         /// <summary>
         /// Gets or sets the heart rate at the time of this map point.
@@ -568,7 +582,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "pace",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? Pace { get; set; }
+        public double? Pace { get; set; }
 
         /// <summary>
         /// Gets or sets a number between 0 and 100 that denotes the pace/speed between the 
@@ -582,7 +596,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "scaledPace",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? ScaledPace { get; set; }
+        public double? ScaledPace { get; set; }
 
         /// <summary>
         /// Gets or sets the speed.
@@ -590,7 +604,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "speed",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? Speed { get; set; }
+        public double? Speed { get; set; }
 
         /// <summary>
         /// Gets or sets the GPS location for this map point.
@@ -658,7 +672,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "speedOverGround",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? SpeedOverGround { get; set; }
+        public double? SpeedOverGround { get; set; }
 
         /// <summary>
         /// Gets or sets the latitude for the GPS point in degrees * 10^7 (+ = North).
@@ -666,7 +680,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "latitude",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? Latitude { get; set; }
+        public double? Latitude { get; set; }
 
         /// <summary>
         /// Gets or sets the longitude for the GPS point in degrees * 10^7 (+ = East).
@@ -674,7 +688,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "longitude",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? Longitude { get; set; }
+        public double? Longitude { get; set; }
 
         /// <summary>
         /// Gets or sets the elevation from mean sea level in m * 100.
@@ -682,7 +696,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "elevationFromMeanSeaLevel",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? ElevationFromMeanSeaLevel { get; set; }
+        public double? ElevationFromMeanSeaLevel { get; set; }
 
         /// <summary>
         /// Gets or sets the estimated horizontal error in m * 100.
@@ -690,7 +704,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "estimatedHorizontalError",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? EstimatedHorizontalError { get; set; }
+        public double? EstimatedHorizontalError { get; set; }
 
         /// <summary>
         /// Gets or sets the estimated vertical error in m * 100.
@@ -698,7 +712,7 @@ namespace MSHealthAPI
         [JsonProperty(PropertyName = "estimatedVerticalError",
                       NullValueHandling = NullValueHandling.Ignore,
                       Required = Required.Default)]
-        public int? EstimatedVerticalError { get; set; }
+        public double? EstimatedVerticalError { get; set; }
 
         #endregion
 

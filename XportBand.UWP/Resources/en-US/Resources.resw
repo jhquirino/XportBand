@@ -366,10 +366,10 @@
   <data name="MessageContentExportEmptyGPSData" xml:space="preserve">
     <value>seems that current activity doesn't contains valid gps data. ¿export anyway?</value>
   </data>
-  <data name="MessageContentExportGPXFail" xml:space="preserve">
+  <data name="MessageContentActivityExportFail" xml:space="preserve">
     <value>activity couldn't be exported to: {0}</value>
   </data>
-  <data name="MessageContentExportGPXSuccess" xml:space="preserve">
+  <data name="MessageContentActivityExportSuccess" xml:space="preserve">
     <value>activity exported to: {0}</value>
   </data>
   <data name="MessageContentSelectActivityType" xml:space="preserve">
@@ -401,7 +401,8 @@
 - Filter by Type/Period
 - See Details/Heart Rate/Splits/Map
 - Export List to CSV
-- Export GPS activities to GPX (future support planned for TCX)</value>
+- Export GPS activities to GPX/TCX
+- Sync to Nike+</value>
   </data>
   <data name="TextSettingsServicesHeader.Label" xml:space="preserve">
     <value>services</value>
@@ -411,5 +412,47 @@
   </data>
   <data name="TextSplitDurationHeader.Text" xml:space="preserve">
     <value>duration</value>
+  </data>
+  <data name="MessageTitleExportTCX" xml:space="preserve">
+    <value>export tcx</value>
+  </data>
+  <data name="ButtonNikePlusClear.Content" xml:space="preserve">
+    <value>clear</value>
+  </data>
+  <data name="ButtonNikePlusValidate.Content" xml:space="preserve">
+    <value>validate</value>
+  </data>
+  <data name="TextNikePlusPassword.Text" xml:space="preserve">
+    <value>password:</value>
+  </data>
+  <data name="TextNikePlusUser.Text" xml:space="preserve">
+    <value>user (e-mail):</value>
+  </data>
+  <data name="MessageButtonMoreDetails" xml:space="preserve">
+    <value>more details</value>
+  </data>
+  <data name="MessageContentNikePlusPasswordPattern" xml:space="preserve">
+    <value>your password contains a greater than symbol, ampersand or apostrophe (&gt;, &amp; or '), click 'more details' for further information.</value>
+  </data>
+  <data name="MessageContentNikePlusValidateFail" xml:space="preserve">
+    <value>failed to connect to nike+, wait a moment or validate user/pasword, and try again.</value>
+  </data>
+  <data name="MessageContentNikePlusValidateSuccess" xml:space="preserve">
+    <value>successfully connected to nike+.</value>
+  </data>
+  <data name="MessageTitleNikePlus" xml:space="preserve">
+    <value>nike+</value>
+  </data>
+  <data name="AppBarButtonSyncNikePlus.Label" xml:space="preserve">
+    <value>sync nike+</value>
+  </data>
+  <data name="MessageContentNikePlusSync" xml:space="preserve">
+    <value>activity synchronized to nike+.</value>
+  </data>
+  <data name="MessageContentNikePlusSyncFail" xml:space="preserve">
+    <value>activity couldn't be synchronized to nike+. wait a moment and try again.</value>
+  </data>
+  <data name="MessageContentNikePlusSyncWithFuel" xml:space="preserve">
+    <value>activity synchronized to nike+. fuel gain: {0:N0}</value>
   </data>
 </root>

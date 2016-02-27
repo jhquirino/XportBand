@@ -12,6 +12,7 @@ namespace XportBand.ViewModel
     using GalaSoft.MvvmLight.Views;
     using Model;
     using MSHealthAPI;
+    using NikePlusAPI;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -49,6 +50,16 @@ namespace XportBand.ViewModel
         /// Microsoft Health service instance.
         /// </summary>
         private readonly IMSHealthClient moMSHealthClient;
+
+        /// <summary>
+        /// Nike+ service instance.
+        /// </summary>
+        private readonly INikePlusClient moNikePlusClient;
+
+        /// <summary>
+        /// Inner member for <see cref="IsLoaded"/> property.
+        /// </summary>
+        private bool mbIsLoaded = false;
 
         /// <summary>
         /// Inner member for <see cref="IsRunningRequest"/> property.
@@ -120,9 +131,23 @@ namespace XportBand.ViewModel
         /// </summary>
         private Geopath moMapPath;
 
+        /// <summary>
+        /// Inner member for <see cref="IsNikePlusAvailable"/> property.
+        /// </summary>
+        private bool mbIsNikePlusAvailable;
+
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is loaded.
+        /// </summary>
+        public bool IsLoaded
+        {
+            get { return mbIsLoaded; }
+            set { Set<bool>(() => IsLoaded, ref mbIsLoaded, value); }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is running request.
@@ -254,6 +279,19 @@ namespace XportBand.ViewModel
             set { Set<Geopath>(() => MapPath, ref moMapPath, value); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether Nike+ is available.
+        /// </summary>
+        public bool IsNikePlusAvailable
+        {
+            get { return mbIsNikePlusAvailable; }
+            set
+            {
+                Set<bool>(() => IsNikePlusAvailable, ref mbIsNikePlusAvailable, value);
+                ((RelayCommand)SyncToNikePlusCommand).RaiseCanExecuteChanged();
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -262,6 +300,16 @@ namespace XportBand.ViewModel
         /// Gets the command to execute: Export to GPX.
         /// </summary>
         public ICommand ExportToGpxCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the command to execute: Export to TCX.
+        /// </summary>
+        public ICommand ExportToTcxCommand { get; private set; }
+
+        /// <summary>
+        /// Gets the command to execute: Sync to Nike+.
+        /// </summary>
+        public ICommand SyncToNikePlusCommand { get; private set; }
 
         #endregion
 
@@ -273,12 +321,16 @@ namespace XportBand.ViewModel
         /// <param name="dialogService">Dialog service instance.</param>
         /// <param name="navigationService">Navigation service instance.</param>
         /// <param name="msHealthClient">Microsoft Health service instance.</param>
-        public ActivityDetailsViewModel(IDialogService dialogService, INavigationService navigationService, IMSHealthClient msHealthClient)
+        /// <param name="nikePlusClient">Nike+ service instance.</param>
+        public ActivityDetailsViewModel(IDialogService dialogService, INavigationService navigationService, IMSHealthClient msHealthClient, INikePlusClient nikePlusClient)
         {
             moDialogService = dialogService;
             moNavigationService = navigationService;
             moMSHealthClient = msHealthClient;
+            moNikePlusClient = nikePlusClient;
             ExportToGpxCommand = new RelayCommand(ExportToGpx, () => true);
+            ExportToTcxCommand = new RelayCommand(ExportToTcx, () => true);
+            SyncToNikePlusCommand = new RelayCommand(SyncToNikePlus, () => IsNikePlusAvailable);
             // Handle backbutton requests
             SystemNavigationManager.GetForCurrentView().BackRequested += (s, e) =>
             {
@@ -336,7 +388,7 @@ namespace XportBand.ViewModel
                             System.Diagnostics.Debugger.Break();
                         } // Handle exceptions (just for debugging purposes)
                         await moDialogService.ShowError(Resources.Strings.MessageContentErrorOperation,
-                                                        Resources.Strings.MessageTitleError,
+                                                        Resources.Strings.MessageTitleExportGPX,
                                                         Resources.Strings.MessageButtonOK,
                                                         null);
                     }
@@ -351,7 +403,7 @@ namespace XportBand.ViewModel
                     } // Handle exceptions (just for debugging purposes)
                     loGPX = null;
                     await moDialogService.ShowError(Resources.Strings.MessageContentErrorOperation,
-                                                    Resources.Strings.MessageTitleError,
+                                                    Resources.Strings.MessageTitleExportGPX,
                                                     Resources.Strings.MessageButtonOK,
                                                     null);
                 }
@@ -381,18 +433,210 @@ namespace XportBand.ViewModel
                         Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(loStorageFile);
                         if (status == Windows.Storage.Provider.FileUpdateStatus.Complete)
                         {
-                            await moDialogService.ShowMessage(string.Format(Resources.Strings.MessageContentExportGPXSuccess, loStorageFile.Name),
+                            await moDialogService.ShowMessage(string.Format(Resources.Strings.MessageContentActivityExportSuccess, loStorageFile.Name),
                                                               Resources.Strings.MessageTitleExportGPX);
                         }
                         else
                         {
-                            await moDialogService.ShowError(string.Format(Resources.Strings.MessageContentExportGPXFail, loStorageFile.Name),
+                            await moDialogService.ShowError(string.Format(Resources.Strings.MessageContentActivityExportFail, loStorageFile.Name),
                                                             Resources.Strings.MessageTitleExportGPX,
                                                             Resources.Strings.MessageButtonOK,
                                                             null);
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Exports current activity to TCX.
+        /// </summary>
+        private async void ExportToTcx()
+        {
+            if (Activity != null)
+            {
+                XDocument loTCX = null;
+                try
+                {
+                    // Export Activity without force (if no MapPoints or GPSLocation, raises exception)
+                    loTCX = Activity.ToTCX("XportBand");
+                }
+                catch (ArgumentNullException loArgumentNullException)
+                {
+                    loTCX = null;
+                    // Check if exception was raised because of missing MapPoints/GPSLocation data
+                    if (!string.IsNullOrEmpty(loArgumentNullException.ParamName) &&
+                        loArgumentNullException.ParamName.Equals("MapPoints", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Ask user to confirm
+                        await moDialogService.ShowMessage(Resources.Strings.MessageContentExportEmptyGPSData,
+                                                          Resources.Strings.MessageTitleExportTCX,
+                                                          Resources.Strings.MessageButtonYes,
+                                                          Resources.Strings.MessageButtonNo,
+                                                          (confirm) =>
+                                                          {
+                                                              if (confirm)
+                                                              {
+                                                                  loTCX = Activity.ToTCX("XportBand", confirm);
+                                                              }
+                                                          });
+                    }
+                    else
+                    {
+                        // Handle exceptions (just for debugging purposes). TODO: Delete this code
+                        if (System.Diagnostics.Debugger.IsAttached)
+                        {
+                            System.Diagnostics.Debug.WriteLine(loArgumentNullException.StackTrace);
+                            System.Diagnostics.Debugger.Break();
+                        } // Handle exceptions (just for debugging purposes)
+                        await moDialogService.ShowError(Resources.Strings.MessageContentErrorOperation,
+                                                        Resources.Strings.MessageTitleExportTCX,
+                                                        Resources.Strings.MessageButtonOK,
+                                                        null);
+                    }
+                }
+                catch (Exception loException)
+                {
+                    // Handle exceptions (just for debugging purposes). TODO: Delete this code
+                    if (System.Diagnostics.Debugger.IsAttached)
+                    {
+                        System.Diagnostics.Debug.WriteLine(loException.StackTrace);
+                        System.Diagnostics.Debugger.Break();
+                    } // Handle exceptions (just for debugging purposes)
+                    loTCX = null;
+                    await moDialogService.ShowError(Resources.Strings.MessageContentErrorOperation,
+                                                    Resources.Strings.MessageTitleExportTCX,
+                                                    Resources.Strings.MessageButtonOK,
+                                                    null);
+                }
+
+                // Check TCX (XML formatted document)
+                if (loTCX != null)
+                {
+                    // Convert XML formatted document to string
+                    string lsTCX = null;
+                    StringBuilder loStringBuilder = new StringBuilder();
+                    using (TextWriter loTextWriter = new EncodingStringWriter(loStringBuilder, new UTF8Encoding(false)))
+                    {
+                        loTCX.Save(loTextWriter);
+                        lsTCX = loStringBuilder.ToString();
+                    }
+                    // Ask user for file destination
+                    FileSavePicker loFileSavePicker = new FileSavePicker();
+                    //loFileSavePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+                    loFileSavePicker.FileTypeChoices.Add("TCX", new List<string>() { ".tcx" });
+                    loFileSavePicker.SuggestedFileName = string.Format("XportBand{0}{1:yyyyMMddHHmmss}", Activity.Type, Activity.StartTime);
+                    StorageFile loStorageFile = await loFileSavePicker.PickSaveFileAsync();
+                    if (loStorageFile != null)
+                    {
+                        // Save file
+                        CachedFileManager.DeferUpdates(loStorageFile);
+                        await FileIO.WriteTextAsync(loStorageFile, lsTCX);
+                        Windows.Storage.Provider.FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(loStorageFile);
+                        if (status == Windows.Storage.Provider.FileUpdateStatus.Complete)
+                        {
+                            await moDialogService.ShowMessage(string.Format(Resources.Strings.MessageContentActivityExportSuccess, loStorageFile.Name),
+                                                              Resources.Strings.MessageTitleExportTCX);
+                        }
+                        else
+                        {
+                            await moDialogService.ShowError(string.Format(Resources.Strings.MessageContentActivityExportFail, loStorageFile.Name),
+                                                            Resources.Strings.MessageTitleExportTCX,
+                                                            Resources.Strings.MessageButtonOK,
+                                                            null);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Synchronizes current activity to Nike+.
+        /// </summary>
+        private async void SyncToNikePlus()
+        {
+            try
+            {
+                IsRunningRequest = true;
+                // Convert MSHealthActivity to NikePlusActivity
+                NikePlusActivity loNActivity = Activity.ToNikePlusActicity();
+                // Sync Activity
+                string lsNActivityID = await moNikePlusClient.SyncActivityV2(loNActivity);
+                if (!string.IsNullOrEmpty(lsNActivityID))
+                {
+                    string lsActivityUrl = string.Format(NikePlusClient.PATTERN_URL_ACTIVITY_DETAILS, lsNActivityID);
+                    try
+                    {
+                        loNActivity = await moNikePlusClient.ReadActivity(lsNActivityID, false);
+                        if (loNActivity != null)
+                        {
+                            // Report success sync with detailed NikeFuel gain
+                            // Report with option to show sync activity
+                            await moDialogService.ShowMessage(string.Format(Resources.Strings.MessageContentNikePlusSyncWithFuel, loNActivity.MetricSummary.Fuel),
+                                                              Resources.Strings.MessageTitleNikePlus,
+                                                              Resources.Strings.MessageButtonOK,
+                                                              Resources.Strings.MessageButtonMoreDetails,
+                                                              async (result) =>
+                                                              {
+                                                                  if (!result)
+                                                                      await Windows.System.Launcher.LaunchUriAsync(new Uri(lsActivityUrl));
+                                                              });
+                        }
+                        else
+                        {
+                            // Just report success sync
+                            await moDialogService.ShowMessage(Resources.Strings.MessageContentNikePlusSync,
+                                                              Resources.Strings.MessageTitleNikePlus,
+                                                              Resources.Strings.MessageButtonOK,
+                                                              Resources.Strings.MessageButtonMoreDetails,
+                                                              async (result) =>
+                                                              {
+                                                                  if (!result)
+                                                                      await Windows.System.Launcher.LaunchUriAsync(new Uri(lsActivityUrl));
+                                                              });
+                        }
+                    }
+                    catch (Exception loException2)
+                    {
+                        // Handle exceptions (just for debugging purposes)
+                        if (System.Diagnostics.Debugger.IsAttached)
+                            System.Diagnostics.Debug.WriteLine(loException2.StackTrace);
+                        // Just report success sync
+                        await moDialogService.ShowMessage(Resources.Strings.MessageContentNikePlusSync,
+                                                          Resources.Strings.MessageTitleNikePlus,
+                                                          Resources.Strings.MessageButtonOK,
+                                                          Resources.Strings.MessageButtonMoreDetails,
+                                                          async (result) =>
+                                                          {
+                                                              if (!result)
+                                                                  await Windows.System.Launcher.LaunchUriAsync(new Uri(lsActivityUrl));
+                                                          });
+                    }
+                }
+                else
+                {
+                    // Report failed sync
+                    await moDialogService.ShowMessage(Resources.Strings.MessageContentNikePlusSyncFail,
+                                                      Resources.Strings.MessageTitleNikePlus,
+                                                      Resources.Strings.MessageButtonOK,
+                                                      null);
+                }
+                //
+            }
+            catch (Exception loException)
+            {
+                // Handle exceptions (just for debugging purposes)
+                if (System.Diagnostics.Debugger.IsAttached)
+                    System.Diagnostics.Debug.WriteLine(loException.StackTrace);
+                // Report failed sync
+                await moDialogService.ShowMessage(Resources.Strings.MessageContentNikePlusSyncFail,
+                                                  Resources.Strings.MessageTitleNikePlus,
+                                                  Resources.Strings.MessageButtonOK,
+                                                  null);
+            }
+            finally
+            {
+                IsRunningRequest = false;
             }
         }
 
@@ -410,6 +654,7 @@ namespace XportBand.ViewModel
             MSHealthActivities loActivities = null;
             MSHealthSplitDistanceType loDistanceType = MSHealthSplitDistanceType.None;
             MSHealthActivityInclude loInclude = MSHealthActivityInclude.Details | MSHealthActivityInclude.MapPoints;
+            IsLoaded = false;
             Activity = null;
             TotalDistance = null;
             DistanceUnitShort = null;
@@ -423,6 +668,7 @@ namespace XportBand.ViewModel
             MinElevation = null;
             IsElevationAvailable = false;
             IsHeartRateZonesAvailable = false;
+            IsNikePlusAvailable = false;
             List<HeartRateZoneItem> loHeartRateZones = null;
             // Set back button visible (for Windows app)
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
@@ -646,22 +892,79 @@ namespace XportBand.ViewModel
                 }
                 catch (Exception loException)
                 {
-                    // Handle exceptions (just for debugging purposes). TODO: Delete this code
+                    // Handle exceptions (just for debugging purposes)
                     if (System.Diagnostics.Debugger.IsAttached)
-                    {
                         System.Diagnostics.Debug.WriteLine(loException.StackTrace);
-                        System.Diagnostics.Debugger.Break();
-                    } // Handle exceptions (just for debugging purposes)
                     await moDialogService.ShowError(Resources.Strings.MessageContentErrorOperation,
                                                     Resources.Strings.MessageTitleError,
                                                     Resources.Strings.MessageButtonOK,
                                                     null);
+                    // Return to main page
+                    moNavigationService.GoBack();
                 }
                 finally
                 {
                     Messenger.Default.Send<Geopath>(MapPath);
                     IsRunningRequest = false;
                 }
+                // Check for Nike+ Credentials
+                if (Settings.NikePlusCredential != null)
+                {
+                    if (!System.Text.RegularExpressions.Regex.IsMatch(Settings.NikePlusCredential.Password, "[\"&`'<>]"))
+                    {
+                        try
+                        {
+                            // Check for GPS data
+                            if (Activity.MapPoints == null ||
+                                !Activity.MapPoints.Any())
+                            {
+                                // Get Minute Summaries
+                                loActivities = await moMSHealthClient.ListActivities(ids: lsActivityID,
+                                                                             include: MSHealthActivityInclude.MinuteSummaries,
+                                                                             splitDistanceType: loDistanceType);
+                                // Check Activity details returned
+                                if (loActivities.ItemCount > 0)
+                                {
+                                    // Map from derivated activities to single instance activity
+                                    if (loActivities.FreePlayActivities != null &&
+                                        loActivities.FreePlayActivities.Any())
+                                        Activity.MinuteSummaries = loActivities.FreePlayActivities.FirstOrDefault().MinuteSummaries;
+                                    else if (loActivities.RunActivities != null &&
+                                             loActivities.RunActivities.Any())
+                                        Activity.MinuteSummaries = loActivities.RunActivities.FirstOrDefault().MinuteSummaries;
+                                    else if (loActivities.BikeActivities != null &&
+                                             loActivities.BikeActivities.Any())
+                                        Activity.MinuteSummaries = loActivities.BikeActivities.FirstOrDefault().MinuteSummaries;
+                                    else if (loActivities.GolfActivities != null &&
+                                             loActivities.GolfActivities.Any())
+                                        Activity.MinuteSummaries = loActivities.GolfActivities.FirstOrDefault().MinuteSummaries;
+                                    else if (loActivities.GuidedWorkoutActivities != null &&
+                                             loActivities.GuidedWorkoutActivities.Any())
+                                        Activity.MinuteSummaries = loActivities.GuidedWorkoutActivities.FirstOrDefault().MinuteSummaries;
+                                    else if (loActivities.SleepActivities != null &&
+                                             loActivities.SleepActivities.Any())
+                                        Activity.MinuteSummaries = loActivities.SleepActivities.FirstOrDefault().MinuteSummaries;
+                                }
+                            }
+                        }
+                        catch (Exception loException)
+                        {
+                            // Handle exceptions (just for debugging purposes)
+                            if (System.Diagnostics.Debugger.IsAttached)
+                                System.Diagnostics.Debug.WriteLine(loException.StackTrace);
+                        }
+                        // Ensure Activity either has GPS or MinuteSummaries data
+                        if ((Activity.MapPoints != null &&
+                             Activity.MapPoints.Any()) ||
+                             (Activity.MinuteSummaries != null &&
+                              Activity.MinuteSummaries.Any()))
+                        {
+                            moNikePlusClient.SetCredentials(Settings.NikePlusCredential.UserName, Settings.NikePlusCredential.Password);
+                            IsNikePlusAvailable = true;
+                        }
+                    }
+                }
+                IsLoaded = true;
             }
         }
 
@@ -671,6 +974,7 @@ namespace XportBand.ViewModel
         /// <param name="parameter"><see cref="Windows.UI.Xaml.Navigation.NavigationEventArgs.Parameter" />.</param>
         public void Deactivate(object parameter)
         {
+            IsLoaded = false;
             // No implementation necessary
         }
 

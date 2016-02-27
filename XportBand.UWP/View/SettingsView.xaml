@@ -16,7 +16,35 @@
     <!--#endregion-->
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid>
+        <!--#region VisualStates-->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <!--#region NarrowState-->
+                <VisualState x:Name="NarrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="NikePlusUsrText.(RelativePanel.Below)" Value="NikePlusUsrLabel" />
+                        <Setter Target="NikePlusPwdText.(RelativePanel.Below)" Value="NikePlusPwdLabel" />
+                    </VisualState.Setters>
+                </VisualState>
+                <!--#endregion-->
+                <!--#region WideState-->
+                <VisualState x:Name="WideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="500" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="NikePlusUsrText.(RelativePanel.RightOf)" Value="NikePlusUsrLabel" />
+                        <Setter Target="NikePlusPwdText.(RelativePanel.RightOf)" Value="NikePlusPwdLabel" />
+                    </VisualState.Setters>
+                </VisualState>
+                <!--#endregion-->
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <!--#endregion-->
+        <Grid Visibility="{Binding ShowSignIn, Converter={StaticResource BooleanToVisibilityConverterReversed}}">
             <!--#region Column/Row Definitions-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -61,7 +89,7 @@
                     <!--#endregion-->
                     <!--#region Content-->
                     <ScrollViewer VerticalScrollBarVisibility="Auto"
-                                  HorizontalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
                                   BorderThickness="0,1,0,0"
                                   BorderBrush="{StaticResource SystemControlHighlightListAccentLowBrush}">
                         <Grid Margin="0,5,0,5">
@@ -70,82 +98,195 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
                             <!--#endregion-->
                             <!--#region MicrosoftHealth-->
-                            <!-- MicrosoftHealth Logo -->
-                            <Image Grid.Row="0"
-                                   Grid.Column="0"
-                                   Grid.RowSpan="2"
-                                   Width="56"
-                                   Height="56"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   Stretch="Uniform"
-                                   Margin="5"
-                                   Source="ms-appx:///Assets/MicrosoftHealthLogo.png" />
-                            <!-- MicrosoftHealth Title -->
-                            <Border Grid.Row="0"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    BorderBrush="{StaticResource SystemControlForegroundBaseHighBrush}"
-                                    BorderThickness="0,0,0,1">
-                                <TextBlock x:Uid="TextMicrosoftHealth"
-                                           VerticalAlignment="Bottom"
-                                           HorizontalAlignment="Left"
-                                           Margin="10,5,10,5"
-                                           Style="{ThemeResource BaseTextBlockStyle}" />
-                            </Border>
-                            <!-- Sign-in/Sign-out Button -->
-                            <StackPanel Grid.Row="1"
+                            <!--<Border Grid.Row="0"
+                                    BorderThickness="1"
+                                    BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}">-->
+                            <Grid Grid.Row="0" 
+                                  Padding="5"
+                                  BorderThickness="0,0,0,1"
+                                  BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <!-- MicrosoftHealth Logo -->
+                                <Image Grid.Row="0"
+                                       Grid.Column="0"
+                                       Grid.RowSpan="2"
+                                       Width="56"
+                                       Height="56"
+                                       VerticalAlignment="Top"
+                                       HorizontalAlignment="Center"
+                                       Stretch="Uniform"
+                                       Margin="5"
+                                       Source="ms-appx:///Assets/MicrosoftHealthLogo.png" />
+                                <!-- MicrosoftHealth Title -->
+                                <Border Grid.Row="0"
                                         Grid.Column="1"
-                                        Orientation="Horizontal">
-                                <Button x:Uid="ButtonSignIn"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Left"
-                                        Margin="10,5,10,5"
-                                        IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
-                                        Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverterReversed}}"
-                                        Command="{Binding SignInMSHealthCommand}" />
-                                <Button x:Uid="ButtonSignOut"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Left"
-                                        Margin="10,5,10,5"
-                                        IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
-                                        Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        Command="{Binding SignOutMSHealthCommand}" />
-                                <ProgressRing VerticalAlignment="Center"
-                                              IsActive="{Binding IsMSHealthRunning}"
-                                              Visibility="{Binding IsMSHealthRunning, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            </StackPanel>
-                            <!-- MicrosoftHealth UserName -->
-                            <TextBlock Grid.Row="1"
-                                       Grid.Column="2"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Right"
-                                       Margin="10,5,10,5"
-                                       Text="{Binding MSHealthProfile.FirstName}"/>
-                            <!-- Distance Unit -->
-                            <TextBlock x:Uid="TextDistanceUnit"
-                                       Grid.Row="2"
-                                       Grid.Column="1"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Left"
-                                       Margin="10,10,5,5" />
-                            <ComboBox Grid.Row="2"
-                                      Grid.Column="2"
-                                      VerticalAlignment="Center"
-                                      HorizontalAlignment="Left"
-                                      Margin="5,10,5,5"
-                                      IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
-                                      ItemsSource="{Binding DistanceUnits}"
-                                      SelectedItem="{Binding SelectedDistanceUnit, Mode=TwoWay}"
-                                      DisplayMemberPath="Description"/>
+                                        Grid.ColumnSpan="2"
+                                        BorderBrush="{StaticResource SystemControlForegroundBaseHighBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <TextBlock x:Uid="TextMicrosoftHealth"
+                                               VerticalAlignment="Bottom"
+                                               HorizontalAlignment="Left"
+                                               Margin="10,5,10,5"
+                                               Style="{ThemeResource BaseTextBlockStyle}" />
+                                </Border>
+                                <!-- Sign-in/Sign-out Button -->
+                                <StackPanel Grid.Row="1"
+                                            Grid.Column="1"
+                                            Orientation="Horizontal">
+                                    <Button x:Uid="ButtonSignIn"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            Margin="10,5,10,5"
+                                            IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                            Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverterReversed}}"
+                                            Command="{Binding SignInMSHealthCommand}" />
+                                    <Button x:Uid="ButtonSignOut"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            Margin="10,5,10,5"
+                                            IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                            Visibility="{Binding IsMSHealthSignedIn, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            Command="{Binding SignOutMSHealthCommand}" />
+                                    <ProgressRing VerticalAlignment="Center"
+                                                  IsActive="{Binding IsMSHealthRunning}"
+                                                  Visibility="{Binding IsMSHealthRunning, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                </StackPanel>
+                                <!-- MicrosoftHealth UserName -->
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="2"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Right"
+                                           Margin="10,5,10,5"
+                                           Text="{Binding MSHealthProfile.FirstName}"/>
+                                <!-- Distance Unit -->
+                                <TextBlock x:Uid="TextDistanceUnit"
+                                           Grid.Row="2"
+                                           Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Margin="10,10,5,5" />
+                                <ComboBox Grid.Row="2"
+                                          Grid.Column="2"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Left"
+                                          Margin="5,10,5,5"
+                                          IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                          ItemsSource="{Binding DistanceUnits}"
+                                          SelectedItem="{Binding SelectedDistanceUnit, Mode=TwoWay}"
+                                          DisplayMemberPath="Description"/>
+                            </Grid>
+                            <!--</Border>-->
+                            <!--#endregion-->
+                            <!--#region Nike+-->
+
+                            <Grid Grid.Row="1"
+                                  Padding="5"
+                                  BorderThickness="0,0,0,1"
+                                  BorderBrush="{ThemeResource SystemControlHighlightListAccentLowBrush}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <!-- Nike+ Logo -->
+                                <Image Grid.Row="0"
+                                       Grid.Column="0"
+                                       Grid.RowSpan="2"
+                                       Width="56"
+                                       Height="56"
+                                       VerticalAlignment="Top"
+                                       HorizontalAlignment="Center"
+                                       Stretch="Uniform"
+                                       Margin="5"
+                                       Source="ms-appx:///Assets/NikePlusLogo.png" />
+                                <!-- Nike+ Title -->
+                                <Border Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        BorderBrush="{StaticResource SystemControlForegroundBaseHighBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <TextBlock Text="Nike+"
+                                               VerticalAlignment="Bottom"
+                                               HorizontalAlignment="Left"
+                                               Margin="10,5,10,5"
+                                               Style="{ThemeResource BaseTextBlockStyle}" />
+                                </Border>
+                                <!-- Nike+ Email (user) -->
+                                <RelativePanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+                                    <TextBlock x:Uid="TextNikePlusUser"
+                                               x:Name="NikePlusUsrLabel"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
+                                               Margin="10,10,5,5"
+                                               Width="100" />
+                                    <TextBox x:Name="NikePlusUsrText"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Left"
+                                             Margin="5,10,5,5"
+                                             MinWidth="200"
+                                             InputScope="EmailNameOrAddress"
+                                             IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                             Text="{Binding NikePlusUser, Mode=TwoWay}"/>
+                                </RelativePanel>
+                                <!-- Nike+ Password -->
+                                <RelativePanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
+                                    <TextBlock x:Uid="TextNikePlusPassword"
+                                               x:Name="NikePlusPwdLabel"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Left"
+                                               Margin="10,10,5,5"
+                                               Width="100" />
+                                    <PasswordBox x:Name="NikePlusPwdText"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="5,10,5,5"
+                                                 MinWidth="200"
+                                                 IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                                 Password="{Binding NikePlusPassword, Mode=TwoWay}"/>
+                                </RelativePanel>
+                                <!-- Validate/Clear/Progress -->
+                                <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                                    <Button x:Uid="ButtonNikePlusValidate"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            Margin="10,5,10,5"
+                                            IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                            Command="{Binding ValidateNikePlusCredentialCommand}"/>
+                                    <Button x:Uid="ButtonNikePlusClear"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"
+                                            Margin="10,5,10,5"
+                                            IsEnabled="{Binding IsRunningRequest, Converter={StaticResource BooleanInverseConverter}}"
+                                            Command="{Binding ClearNikePlusCredentialCommand}"/>
+                                    <ProgressRing VerticalAlignment="Center"
+                                                  IsActive="{Binding IsNikePlusRunning}"
+                                                  Visibility="{Binding IsNikePlusRunning, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                </StackPanel>
+                            </Grid>
                             <!--#endregion-->
                         </Grid>
                     </ScrollViewer>
@@ -224,7 +365,7 @@
             <!--#endregion-->
         </Grid>
         <WebView x:Name="wvwSignIn" 
-                 Margin="10" 
+                 Margin="0" 
                  Visibility="{Binding ShowSignIn, Converter={StaticResource BooleanToVisibilityConverter}}">
             <i:Interaction.Behaviors>
                 <ic:EventTriggerBehavior EventName="NavigationCompleted">

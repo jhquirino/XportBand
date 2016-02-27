@@ -10,6 +10,14 @@ namespace XportBand.ViewModel
     using GalaSoft.MvvmLight.Views;
     using Microsoft.Practices.ServiceLocation;
     using MSHealthAPI;
+    using NikePlusAPI;
+#if WINDOWS_UWP
+    using DialogService = GalaSoft.MvvmLight.Views.DialogService;
+    using NavigationService = GalaSoft.MvvmLight.Views.NavigationService;
+#elif DESKTOP_APP
+	using DialogService = XportBand.Services.DialogService;
+	using NavigationService = XportBand.Services.NavigationService;
+#endif
 
     /// <summary>
     /// Locator class for all ViewModels.
@@ -41,6 +49,21 @@ namespace XportBand.ViewModel
                                                     MSHealthScope.ReadActivityLocation |
                                                     MSHealthScope.OfflineAccess;
 
+        /// <summary>
+        /// HACK: ID for registered Nike+ App.
+        /// </summary>
+        public const string NIKEPLUS_APP = "NIKEPLUSGPS";
+
+        /// <summary>
+        /// HACK: Client ID for registered Nike+ App.
+        /// </summary>
+        public const string NIKEPLUS_CLIENT_ID = "9dfa1aef96a54441dfaac68c4410e063";
+
+        /// <summary>
+        /// HACK: Client Secret for registered Nike+ App.
+        /// </summary>
+        public const string NIKEPLUS_CLIENT_SECRET = "3cbd1f1908bc1553";
+
         #endregion
 
         #region ViewModels references
@@ -53,6 +76,7 @@ namespace XportBand.ViewModel
             get { return ServiceLocator.Current.GetInstance<MainViewModel>(); }
         }
 
+#if WINDOWS_UWP
         /// <summary>
         /// ViewModel for Settings view.
         /// </summary>
@@ -68,6 +92,7 @@ namespace XportBand.ViewModel
         {
             get { return ServiceLocator.Current.GetInstance<ActivityDetailsViewModel>(); }
         }
+#endif
 
         #endregion
 
@@ -96,10 +121,14 @@ namespace XportBand.ViewModel
             SimpleIoc.Default.Register<IDialogService, DialogService>();
             IMSHealthClient loMSHealthClient = new MSHealthClient(MSHEALTH_CLIENT_ID, MSHEALTH_CLIENT_SECRET, MSHEALTH_SCOPE);
             SimpleIoc.Default.Register<IMSHealthClient>(() => loMSHealthClient);
+            INikePlusClient loNikePlusClient = new NikePlusClient(NIKEPLUS_APP, NIKEPLUS_CLIENT_ID, NIKEPLUS_CLIENT_SECRET);
+            SimpleIoc.Default.Register<INikePlusClient>(() => loNikePlusClient);
             // Register ViewModels
             SimpleIoc.Default.Register<MainViewModel>();
+#if WINDOWS_UWP
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<ActivityDetailsViewModel>();
+#endif
         }
 
         #endregion
@@ -113,8 +142,10 @@ namespace XportBand.ViewModel
         {
             // TODO Clear the ViewModels
             ServiceLocator.Current.GetInstance<MainViewModel>().Cleanup();
+#if WINDOWS_UWP
             ServiceLocator.Current.GetInstance<SettingsViewModel>().Cleanup();
             ServiceLocator.Current.GetInstance<ActivityDetailsViewModel>().Cleanup();
+#endif
         }
 
         /// <summary>
@@ -124,9 +155,11 @@ namespace XportBand.ViewModel
         private INavigationService CreateNavigationService()
         {
             var loNavigationService = new NavigationService();
+#if WINDOWS_UWP
             loNavigationService.Configure("Main", typeof(View.MainView));
             loNavigationService.Configure("Settings", typeof(View.SettingsView));
             loNavigationService.Configure("ActivityDetails", typeof(View.ActivityDetailsView));
+#endif
             return loNavigationService;
         }
 

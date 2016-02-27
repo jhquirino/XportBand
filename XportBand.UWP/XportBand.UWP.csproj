@@ -103,7 +103,9 @@
     <Compile Include="Converters\HeartRateZoneToBrushConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
+    <Compile Include="Model\CubicSpline.cs" />
     <Compile Include="Model\DistanceUnit.cs" />
+    <Compile Include="Model\Extensions.cs" />
     <Compile Include="Model\INavigable.cs" />
     <Compile Include="Model\NameValueItem.cs" />
     <Compile Include="Model\Settings.cs" />
@@ -139,9 +141,16 @@
     <None Include="XportBand.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\appbar.csvexport.scale-100.png" />
+    <Content Include="Assets\appbar.gpxexport.scale-100.png" />
+    <Content Include="Assets\appbar.nikeplus.scale-100.png" />
+    <Content Include="Assets\appbar.nikeplus.scale-100_contrast-black.png" />
+    <Content Include="Assets\appbar.nikeplus.scale-100_contrast-white.png" />
+    <Content Include="Assets\appbar.tcxexport.scale-100.png" />
     <Content Include="Assets\LocationDarkGreen.png" />
     <Content Include="Assets\LocationDarkRed.png" />
     <Content Include="Assets\MicrosoftHealthLogo.png" />
+    <Content Include="Assets\NikePlusLogo.png" />
     <Content Include="Assets\RunkeeperLogo.png" />
     <Content Include="Assets\XportBandLogo.png" />
     <None Include="Package.StoreAssociation.xml" />
@@ -197,6 +206,10 @@
     <ProjectReference Include="..\MSHealthAPI\MSHealthAPI.UWP.csproj">
       <Project>{b965928d-c284-4169-8187-2f9c009fb2b0}</Project>
       <Name>MSHealthAPI.UWP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NikePlusAPI\NikePlusAPI.UWP.csproj">
+      <Project>{74be7141-8a7d-4e39-8c01-6a2661011c44}</Project>
+      <Name>NikePlusAPI.UWP</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
