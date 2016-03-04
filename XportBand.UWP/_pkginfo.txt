@@ -1,1 +1,1 @@
-D:\GitHub\XportBand\AppPackages\XportBand.UWP_0.1.0.0\XportBand.UWP_0.1.0.0_x86_x64_arm.appxbundle
+D:\GitHub\XportBand\AppPackages\XportBand.UWP_0.3.0.0\XportBand.UWP_0.3.0.0_x86_x64_arm.appxbundle

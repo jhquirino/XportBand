@@ -1,2 +1,3 @@
-MainPackage=D:\GitHub\XportBand\bin\ARM\Release\XportBand.UWP_0.1.0.0_ARM.appx
-SymbolPackage=D:\GitHub\XportBand\AppPackages\XportBand.UWP_0.1.0.0_Test\XportBand.UWP_0.1.0.0_ARM.appxsym
+MainPackage=D:\GitHub\XportBand\bin\ARM\Release\XportBand.UWP_0.3.0.0_ARM.appx
+SymbolPackage=D:\GitHub\XportBand\AppPackages\XportBand.UWP_0.3.0.0_Test\XportBand.UWP_0.3.0.0_ARM.appxsym
+ResourcePack=D:\GitHub\XportBand\bin\ARM\Release\XportBand.UWP_0.3.0.0_scale-100.appx

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="41957YorchsIdeas.XportBand" Publisher="CN=AA284C83-2653-49E4-8894-2403E2F37686" Version="0.3.0.1" />
+  <Identity Name="41957YorchsIdeas.XportBand" Publisher="CN=AA284C83-2653-49E4-8894-2403E2F37686" Version="0.3.0.0" />
   <mp:PhoneIdentity PhoneProductId="0f33c5cf-a3e4-4e51-aafa-1114331413dd" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>XportBand</DisplayName>
