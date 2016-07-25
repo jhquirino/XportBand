@@ -145,6 +145,15 @@ namespace XportBand.ViewModel
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether filter activity type: Hike.
+        /// </summary>
+        public bool FilterActivityHike
+        {
+            get { return Settings.MSHealthFilterActivityHike; }
+            set { Settings.MSHealthFilterActivityHike = value; RaisePropertyChanged<bool>(() => FilterActivityHike); }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether filter period: Last Day.
         /// </summary>
         public bool FilterPeriodDay
@@ -329,7 +338,8 @@ namespace XportBand.ViewModel
                 Activities = null;
                 // Check if at least one Activity Type was selected
                 bool lbFilterActivityType = FilterActivityExercise | FilterActivityRun | FilterActivityBike |
-                                            FilterActivityGolf | FilterActivitySleep | FilterActivityGuided;
+                                            FilterActivityGolf | FilterActivitySleep | FilterActivityGuided |
+                                            FilterActivityHike;
                 if (!lbFilterActivityType)
                 {
 #if WINDOWS_UWP
@@ -351,6 +361,8 @@ namespace XportBand.ViewModel
                     loActivityType |= MSHealthActivityType.Sleep;
                 if (FilterActivityGuided)
                     loActivityType |= MSHealthActivityType.GuidedWorkout;
+                if (FilterActivityHike)
+                    loActivityType |= MSHealthActivityType.Hike;
                 // Determine Period to filter
                 switch (Settings.MSHealthFilterPeriod)
                 {
@@ -407,6 +419,9 @@ namespace XportBand.ViewModel
                 if (loActivities.GuidedWorkoutActivities != null &&
                     loActivities.GuidedWorkoutActivities.Any())
                     loActivitiesList.AddRange(loActivities.GuidedWorkoutActivities);
+                if (loActivities.HikeActivities != null &&
+                    loActivities.HikeActivities.Any())
+                    loActivitiesList.AddRange(loActivities.HikeActivities);
                 // Sort descending by Start Time and append to Bindable property
                 loActivitiesList = loActivitiesList.OrderByDescending(loAct => loAct.StartTime).ToList();
                 Activities = new ObservableCollection<MSHealthActivity>(loActivitiesList);

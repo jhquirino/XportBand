@@ -3016,6 +3016,33 @@ namespace XportBand.Resources
 			}
 		}
 				
+		/// <summary>
+		/// Key for resource string <b>ToggleActivityTypeHike.Text</b>.
+		/// </summary>
+		const string TOGGLE_ACTIVITY_TYPE_HIKE_TEXT = "hike";
+		/// <summary>
+		/// Inner member for property <see cref="ToggleActivityTypeHikeText"/>.
+		/// </summary>
+		static string msToggleActivityTypeHikeText;
+		/// <summary>
+		/// Gets string value for resource <b>ToggleActivityTypeHike.Text</b> (<i>"hike"</i>).
+		/// </summary>
+		public static string ToggleActivityTypeHikeText
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(msToggleActivityTypeHikeText))
+				{
+					msToggleActivityTypeHikeText = moResourceLoader.GetString("ToggleActivityTypeHike.Text");
+					if (string.IsNullOrEmpty(msToggleActivityTypeHikeText))
+					{
+						msToggleActivityTypeHikeText = TOGGLE_ACTIVITY_TYPE_HIKE_TEXT;
+					}
+				}
+				return msToggleActivityTypeHikeText;
+			}
+		}
+				
 	}
 	
 }

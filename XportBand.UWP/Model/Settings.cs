@@ -273,6 +273,15 @@ namespace XportBand.Model
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether filter hike activities.
+        /// </summary>
+        public static bool MSHealthFilterActivityHike
+        {
+            get { return ReadSettingValue<bool>("hike", "MSHealthActivityFilters"); }
+            set { WriteSettingValue("hike", value, "MSHealthActivityFilters"); }
+        }
+
+        /// <summary>
         /// Gets or sets the Microsoft Health filter period.
         /// </summary>
         public static string MSHealthFilterPeriod

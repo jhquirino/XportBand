@@ -1,0 +1,187 @@
+﻿<Page x:Class="XportBand.Views.MainView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:XportBand.Views"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:st="using:XportBand.StateTriggers"
+      mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="DesktopNarrowState">
+                    <VisualState.StateTriggers>
+                        <st:DeviceTrigger Family="Desktop" />
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ColumnMaster.Width" Value="*" />
+                        <Setter Target="ColumnDetail.Width" Value="0" />
+                        <Setter Target="AppTitle.(Grid.ColumnSpan)" Value="1" />
+                        <Setter Target="CommandBarTop.Visibility" Value="Visible" />
+                        <Setter Target="CommandBarBottom.Visibility" Value="Collapsed" />
+                        <!--<Setter Target="ButtonViewDetails.IsEnabled" Value="True" />
+                        <Setter Target="ButtonViewDetails.Visibility" Value="Visible" />-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="DesktopWideState">
+                    <VisualState.StateTriggers>
+                        <st:DeviceTrigger Family="Desktop" />
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ColumnMaster.Width" Value="4*" />
+                        <Setter Target="ColumnDetail.Width" Value="6*" />
+                        <Setter Target="AppTitle.(Grid.ColumnSpan)" Value="2" />
+                        <Setter Target="CommandBarTop.Visibility" Value="Visible" />
+                        <Setter Target="CommandBarBottom.Visibility" Value="Collapsed" />
+                        <!--<Setter Target="ButtonViewDetails.IsEnabled" Value="False" />
+                        <Setter Target="ButtonViewDetails.Visibility" Value="Collapsed" />-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="MobileLandscape">
+                    <VisualState.StateTriggers>
+                        <st:DeviceTrigger Family="Mobile" Orientation="Landscape" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ColumnMaster.Width" Value="*" />
+                        <Setter Target="ColumnDetail.Width" Value="0" />
+                        <Setter Target="CommandBarTop.Visibility" Value="Collapsed" />
+                        <Setter Target="CommandBarBottom.Visibility" Value="Visible" />
+                        <!--<Setter Target="ButtonViewDetails.IsEnabled" Value="False" />
+                        <Setter Target="ButtonViewDetails.Visibility" Value="Collapsed" />-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="MobilePortrait">
+                    <VisualState.StateTriggers>
+                        <st:DeviceTrigger Family="Mobile" Orientation="Portrait" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ColumnMaster.Width" Value="*" />
+                        <Setter Target="ColumnDetail.Width" Value="0" />
+                        <Setter Target="CommandBarTop.Visibility" Value="Collapsed" />
+                        <Setter Target="CommandBarBottom.Visibility" Value="Visible" />
+                        <!--<Setter Target="ButtonViewDetails.IsEnabled" Value="False" />
+                        <Setter Target="ButtonViewDetails.Visibility" Value="Collapsed" />-->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" x:Name="ColumnMaster" />
+            <ColumnDefinition Width="6*" x:Name="ColumnDetail" />
+        </Grid.ColumnDefinitions>
+
+        <!--#region Title/Progress -->
+        <!--<Border x:Name="AppTitle"
+                Grid.Row="0" 
+                Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+            
+        </Border>-->
+        <!--#endregion-->
+
+        <CommandBar x:Name="CommandBarTop" 
+                    Grid.Row="1">
+            <CommandBar.Content>
+                <StackPanel Orientation="Horizontal">
+                    <!-- Title -->
+                    <TextBlock x:Uid="TextAppTitle"
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Left" 
+                           Margin="10,10,0,10"
+                           Style="{ThemeResource TitleTextBlockStyle}"/>
+                    <!-- Progress Indicator -->
+                    <ProgressRing VerticalAlignment="Center"
+                              HorizontalAlignment="Right"
+                              Margin="10"
+                              IsActive="true"
+                              Visibility="Visible" />
+                </StackPanel>
+            </CommandBar.Content>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="filters" Icon="Filter">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutSubItem x:Uid="TextFilterActivityType" HorizontalContentAlignment="Stretch">
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeExercise" HorizontalContentAlignment="Stretch">
+                                    <ToggleMenuFlyoutItem.Template>
+                                        <ControlTemplate TargetType="ToggleMenuFlyoutItem">
+                                            <StackPanel Orientation="Horizontal">
+                                                <SymbolIcon Symbol="Mail" />
+                                                <TextBlock Text="{TemplateBinding Text}" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </ToggleMenuFlyoutItem.Template>
+                                </ToggleMenuFlyoutItem>
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeRun" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeBike" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGolf" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeSleep" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGuided" />
+                            </MenuFlyoutSubItem>
+                            <MenuFlyoutSubItem x:Uid="TextFilterActivityPeriod">
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodDay" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodWeek" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodMonth" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodYear" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodAll" />
+                            </MenuFlyoutSubItem>
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+                <AppBarButton Icon="Sync" Label="list activities" />
+                <!--<AppBarButton x:Name="ButtonViewDetails" Icon="PreviewLink" Label="view details" />-->
+                <AppBarSeparator />
+                <AppBarButton Icon="Setting" Label="settings" />
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+
+    </Grid>
+
+    <Page.BottomAppBar>
+        <CommandBar x:Name="CommandBarBottom" Visibility="Collapsed">
+            <CommandBar.PrimaryCommands>
+                <AppBarButton Label="filters" Icon="Filter">
+                    <AppBarButton.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutSubItem x:Uid="TextFilterActivityType" HorizontalContentAlignment="Stretch">
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeExercise" HorizontalContentAlignment="Stretch">
+                                    <ToggleMenuFlyoutItem.Template>
+                                        <ControlTemplate TargetType="ToggleMenuFlyoutItem">
+                                            <StackPanel Orientation="Horizontal">
+                                                <SymbolIcon Symbol="Mail" />
+                                                <TextBlock Text="{TemplateBinding Text}" />
+                                            </StackPanel>
+                                        </ControlTemplate>
+                                    </ToggleMenuFlyoutItem.Template>
+                                </ToggleMenuFlyoutItem>
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeRun" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeBike" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGolf" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeSleep" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGuided" />
+                            </MenuFlyoutSubItem>
+                            <MenuFlyoutSubItem x:Uid="TextFilterActivityPeriod">
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodDay" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodWeek" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodMonth" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodYear" />
+                                <ToggleMenuFlyoutItem x:Uid="ToggleActivityPeriodAll" />
+                            </MenuFlyoutSubItem>
+                        </MenuFlyout>
+                    </AppBarButton.Flyout>
+                </AppBarButton>
+                <AppBarButton Icon="Sync" Label="list activities" />
+                <AppBarSeparator />
+                <AppBarButton Icon="Setting" Label="settings" />
+            </CommandBar.PrimaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
+</Page>

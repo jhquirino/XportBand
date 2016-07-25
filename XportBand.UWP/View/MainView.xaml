@@ -93,6 +93,8 @@
                                               IsChecked="{Binding FilterActivitySleep, Mode=TwoWay}" />
                         <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeGuided" 
                                               IsChecked="{Binding FilterActivityGuided, Mode=TwoWay}" />
+                        <ToggleMenuFlyoutItem x:Uid="ToggleActivityTypeHike" 
+                                              IsChecked="{Binding FilterActivityHike, Mode=TwoWay}" />
                     </MenuFlyout>
                 </Button.Flyout>
             </Button>

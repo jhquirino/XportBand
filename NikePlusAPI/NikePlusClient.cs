@@ -121,6 +121,12 @@ namespace NikePlusAPI
         /// <returns>ID of Activity successfully uploaded.</returns>
         Task<string> SyncActivityV2(NikePlusActivity activity, string accessToken = null);
 
+        /// <summary>
+        /// Ends Sync Nike+ Activity using Nike+ API v2.0.
+        /// </summary>
+        /// <param name="accessToken">Access token to connect Nike+.</param>
+        Task EndSyncV2(string accessToken);
+
         #endregion
 
     }
@@ -860,6 +866,8 @@ namespace NikePlusAPI
                                     // Parse XML response
                                     XDocument loDocument = XDocument.Parse(lsResponse);
                                     lsActivityID = loDocument.Descendants("activityId").FirstOrDefault().Value;
+                                    try { await EndSyncV2(lsAccessToken); }
+                                    catch { /* Do nothing */ }
                                 }
                             }
                         }
@@ -880,6 +888,84 @@ namespace NikePlusAPI
                 }
             }
             return lsActivityID;
+        }
+
+        /// <summary>
+        /// Ends Sync Nike+ Activity using Nike+ API v2.0.
+        /// </summary>
+        /// <param name="accessToken">Access token to connect Nike+.</param>
+        public async Task EndSyncV2(string accessToken)
+        {
+            HttpWebRequest loWebRequest = null;
+            // Check provided access token
+            if (string.IsNullOrEmpty(accessToken))
+                throw new ArgumentNullException("accessToken");
+
+            try
+            {
+                UriBuilder loUriBuilder = new UriBuilder(BASE_URI_V2);
+                loUriBuilder.Path = SYNC_COMPLETE_PATH_V2;
+                loUriBuilder.Query = string.Format("access_token={0}", accessToken);
+                //// Cookies
+                //CookieContainer loCookieContainer = new CookieContainer();
+                //Uri loLoginUri = new Uri(LOGIN_URI_V2);
+                //loCookieContainer.Add(loLoginUri, new Cookie(APP_COOKIE_V2, msApp, "/", LOGIN_DOMAIN_V2));
+                //loCookieContainer.Add(loLoginUri, new Cookie(CLIENT_ID_COOKIE_V2, msClientId, "/", LOGIN_DOMAIN_V2));
+                //loCookieContainer.Add(loLoginUri, new Cookie(CLIENT_SECRET_COOKIE_V2, msClientSecret, "/", LOGIN_DOMAIN_V2));
+                // Prepare request
+                loWebRequest = WebRequest.Create(loUriBuilder.Uri) as HttpWebRequest;
+                //loWebRequest.CookieContainer = loCookieContainer;
+#if DESKTOP_APP
+						loWebRequest.UserAgent = USER_AGENT_V2;
+#elif WINDOWS_UWP
+                loWebRequest.Headers["user-agent"] = USER_AGENT_V2;
+#endif
+                loWebRequest.Headers["appId"] = msApp;
+                //loWebRequest.Accept = "application/json";
+                loWebRequest.Method = "POST";
+//#if DESKTOP_APP
+//						loWebRequest.ContentLength = loPostContent.Length;
+//#endif
+//                // Post request
+//                using (Stream loRequestStream = await loWebRequest.GetRequestStreamAsync())
+//                {
+//                    loRequestStream.Write(loPostContent, 0, loPostContent.Length);
+//                    loRequestStream.Flush();
+//#if DESKTOP_APP
+//							loRequestStream.Close();
+//#endif
+//                }
+                // Read response (XML formatted)
+                using (WebResponse loWebResponse = await loWebRequest.GetResponseAsync())
+                {
+                    using (Stream loResponseStream = loWebResponse.GetResponseStream())
+                    {
+                        using (StreamReader loStreamReader = new StreamReader(loResponseStream))
+                        {
+                            string lsResponse = loStreamReader.ReadToEnd();
+                            // (Just for debugging purposes: show response).
+                            if (System.Diagnostics.Debugger.IsAttached)
+                                System.Diagnostics.Debug.WriteLine(lsResponse);
+                            //// Parse XML response
+                            //XDocument loDocument = XDocument.Parse(lsResponse);
+                            //lsActivityID = loDocument.Descendants("activityId").FirstOrDefault().Value;
+                        }
+                    }
+                }
+            }
+            catch (WebException loWebException)
+            {
+                //lsActivityID = null;
+                throw new NikePlusException(loWebException.Message, loWebException, LOGIN_URI_DEV, null);
+            }
+            catch (Exception loException)
+            {
+                // (Just for debugging purposes: show exception).
+                if (System.Diagnostics.Debugger.IsAttached)
+                    System.Diagnostics.Debug.WriteLine(loException.StackTrace);
+                //lsActivityID = null;
+                throw;
+            }
         }
 
         #endregion

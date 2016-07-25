@@ -716,6 +716,9 @@ namespace XportBand.ViewModel
                         else if (loActivities.SleepActivities != null &&
                                  loActivities.SleepActivities.Any())
                             Activity = loActivities.SleepActivities.FirstOrDefault();
+                        else if (loActivities.HikeActivities != null &&
+                                 loActivities.HikeActivities.Any())
+                            Activity = loActivities.HikeActivities.FirstOrDefault();
                     }
                     // Check current activity instance
                     if (Activity != null)

@@ -76,6 +76,15 @@ namespace MSHealthAPI
         public IList<MSHealthActivity> SleepActivities { get; set; }
 
         /// <summary>
+        /// Gets or sets the collection of hike activities.
+        /// </summary>
+        [JsonProperty(PropertyName = "hikeActivities",
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default,
+                      ItemIsReference = true)]
+        public IList<MSHealthActivity> HikeActivities { get; set; }
+
+        /// <summary>
         /// Gets or sets the URI for the next page of data.
         /// </summary>
         [JsonProperty(PropertyName = "nextPage",
@@ -299,6 +308,14 @@ namespace MSHealthAPI
         public IList<MSHealthActivitySegment> ActivitySegments { get; set; }
 
         /// <summary>
+        /// Gets or sets the localized name of the exercise being completed.
+        /// </summary>
+        [JsonProperty(PropertyName = "exerciseTypeName",
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
+        public string ExerciseTypeName { get; set; }
+
+        /// <summary>
         /// Gets or sets the number of complete circuit rounds actually performed.
         /// </summary>
         /// <remarks>
@@ -509,6 +526,29 @@ namespace MSHealthAPI
                       Required = Required.Default,
                       ItemIsReference = true)]
         public IList<MSHealthActivity> ChildActivities { get; set; }
+
+        /// <summary>
+        /// Gets or sets the elevation gained.
+        /// </summary>
+        /// <remarks>
+        /// Only available on <see cref="MSHealthActivityType.Hike"/>
+        /// </remarks>
+        [JsonProperty(PropertyName = "ascentRate",
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
+        public decimal? AscentRate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum elevation gain.
+        /// </summary>
+        /// <remarks>
+        /// Only available on <see cref="MSHealthActivityType.Hike"/>
+        /// </remarks>
+        [JsonProperty(PropertyName = "maxAscentRate",
+                      NullValueHandling = NullValueHandling.Ignore,
+                      Required = Required.Default)]
+        public decimal? MaxAscentRate { get; set; }
+
 
         #endregion
 
@@ -966,6 +1006,10 @@ namespace MSHealthAPI
         /// Regular exercise activity.
         /// </summary>
         RegularExercise = 512,
+        /// <summary>
+        /// Hike activity.
+        /// </summary>
+        Hike = 1024,
     }
 
     #endregion
@@ -1123,6 +1167,10 @@ namespace MSHealthAPI
         /// Not worn segment type.
         /// </summary>
         NotWorn,
+        /// <summary>
+        /// Hike segment type.
+        /// </summary>
+        Hike,
     }
 
     #endregion

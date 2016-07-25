@@ -455,4 +455,7 @@
   <data name="MessageContentNikePlusSyncWithFuel" xml:space="preserve">
     <value>activity synchronized to nike+. fuel gain: {0:N0}</value>
   </data>
+  <data name="ToggleActivityTypeHike.Text" xml:space="preserve">
+    <value>hike</value>
+  </data>
 </root>

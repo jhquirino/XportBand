@@ -664,6 +664,8 @@ namespace MSHealthAPI
                     lsParamValue += string.Format(",{0}", MSHealthActivityType.Golf);
                 if (type.HasFlag(MSHealthActivityType.RegularExercise))
                     lsParamValue += string.Format(",{0}", MSHealthActivityType.RegularExercise);
+                if (type.HasFlag(MSHealthActivityType.Hike))
+                    lsParamValue += string.Format(",{0}", MSHealthActivityType.Hike);
                 lsParamValue = lsParamValue.TrimStart(new char[] { ',' });
                 loQuery.AppendFormat("&activityTypes={0}", lsParamValue);
             }
